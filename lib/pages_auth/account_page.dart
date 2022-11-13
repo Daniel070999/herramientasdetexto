@@ -20,10 +20,6 @@ class _AccountPageState extends State<AccountPage> {
   final _passwordConfirmController = TextEditingController();
   final _validatedForm = GlobalKey<FormState>();
   var _loading = false;
-
-  /// Called once a user id is received within `onAuthenticated()`
-
-  /// Called when user taps `Update` button
   Future<void> _updateProfileAndAuth() async {
     setState(() {
       _loading = true;
