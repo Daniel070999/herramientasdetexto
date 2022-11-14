@@ -31,87 +31,19 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
   Future<void> _saveNote(BuildContext context) async {
-    Fluttertoast.showToast(
-        msg: 'Guardando nota...', gravity: ToastGravity.CENTER);
-    setState(() {});
-    try {
-      final title = stringToBase64.encode(_titleController.text);
-      final description = stringToBase64.encode(_descriptionController.text);
-      final createAt = DateTime.now().toIso8601String();
-      final userId = supabase.auth.currentUser!.id;
-
-      final data = {
-        'id_notes_user': userId,
-        'create_at': createAt,
-        'title': title,
-        'description': description
-      };
-      await supabase.from('notes').insert(data);
-      if (mounted) {
-        Fluttertoast.showToast(msg: 'Nota creada');
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      if (e.toString().contains('ergjvwwsxxowhfbktrnj.supabase.co')) {
-        Fluttertoast.showToast(
-            msg: 'Revise su conexión a internet', backgroundColor: Colors.red);
-      }
-    }
-    setState(() {
-      _titleController.clear();
-      _descriptionController.clear();
-      getNotes();
-    });
+   //almacenar internamente
   }
 
   Future<void> _updateNote(BuildContext context, String titleUpdate,
       String descriptionUpdate, String idUpdate) async {
-    showLoaderDialog(context, 'Actualizando nota', 'images/lottie/update.zip');
-    setState(() {});
-    try {
-      final createAt = DateTime.now().toIso8601String();
-      final id = idUpdate;
-      final data = {
-        'update_at': createAt,
-        'title': stringToBase64.encode(titleUpdate),
-        'description': stringToBase64.encode(descriptionUpdate)
-      };
-      await supabase.from('notes').update(data).eq('id', id);
-      if (mounted) {
-        Navigator.pop(context);
-        _titleUpdate = false;
-        _descriptionUpdate = false;
-        Fluttertoast.showToast(msg: 'Nota actualizada');
-
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'Algo salió mal');
-    }
-    setState(() {
-      _titleController.clear();
-      _descriptionController.clear();
-      getNotes();
-    });
+        //actualizar internamente
   }
 
   Future<List> getNotes() async {
     setState(() {
       _loadingNotes = true;
     });
-    try {
-      final idUser = supabase.auth.currentUser!.id;
-      data = await supabase
-          .from('notes')
-          .select('title , description, id')
-          .eq('id_notes_user', idUser)
-          .order('create_at', ascending: false);
-    } catch (e) {
-      if (e.toString().contains('ergjvwwsxxowhfbktrnj.supabase.co')) {
-        Fluttertoast.showToast(
-            msg: 'Revise su conexión a internet', backgroundColor: Colors.red);
-      }
-    }
+    //almacenar internamente
     setState(() {
       _loadingNotes = false;
     });
@@ -121,16 +53,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   Future<void> _deleteNote(BuildContext context, String idUpdate) async {
     showLoaderDialog(context, 'Eliminando nota', 'images/lottie/delete.zip');
     try {
-      String id = idUpdate.trim();
-      await supabase.from('notes').delete().eq('id', id);
-      if (mounted) {
-        Navigator.pop(context);
-        Fluttertoast.showToast(msg: 'Nota eliminada');
-
-        setState(() {
-          getNotes();
-        });
-      }
+      //almacenar internamente
     } catch (e) {
       if (e.toString().contains('ergjvwwsxxowhfbktrnj.supabase.co')) {
         Fluttertoast.showToast(

@@ -18,7 +18,7 @@ class _AcercaAppState extends State<AcercaApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Notas',
+            'Acerca de la aplicación',
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(gradient: barColor()),

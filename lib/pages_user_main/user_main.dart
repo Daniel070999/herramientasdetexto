@@ -13,19 +13,9 @@ class UserMain extends StatefulWidget {
 class _UserMainState extends State<UserMain> {
   int statePage = 0;
 
-  Future<void> _resetPass(BuildContext context) async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.of(context).pushReplacementNamed('/reset');
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    Object? parametros = ModalRoute.of(context)!.settings.arguments;
-    if (parametros == 'resetPass') {
-      _resetPass(context);
-    }
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/acerca.dart';
-import 'package:fluttersupabase/pages_auth/login_page.dart';
-import 'package:fluttersupabase/pages_auth/splash_page.dart';
 import 'package:fluttersupabase/pages_user_main/user_read_pdf.dart';
 import 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
 import 'package:fluttersupabase/pages_user_main/user_image_text.dart';
@@ -10,12 +8,15 @@ import 'package:fluttersupabase/pages_user_main/user_read_qr_android.dart';
 import 'package:fluttersupabase/pages_user_main/user_read_qr_ios.dart';
 import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 import 'package:fluttersupabase/pages_user_main/user_translate.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final supabase = Supabase.instance.client;
+
+
+
+late bool theme = false;
+
 acerca(BuildContext context) async {
   Navigator.push(
       context,
@@ -88,8 +89,6 @@ textImage(BuildContext context) async {
       ));
 }
 
-bool animationState = true;
-bool theme = false;
 Color menuBackgroundColor() {
   return theme ? Colors.grey.shade900 : Colors.green;
 }
@@ -158,21 +157,6 @@ ThemeData themeSelect() {
             ),
           ),
         );
-}
-
-signOut(BuildContext context) {
-  try {
-    supabase.auth.signOut();
-  } on AuthException catch (error) {
-    Fluttertoast.showToast(msg: 'Algo salió mal');
-  } catch (error) {
-    Fluttertoast.showToast(msg: 'Algo salió mal');
-  }
-  Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const SplashPage(),
-      ),
-      (route) => false);
 }
 
 //dialogo que ocupa toda la ventana

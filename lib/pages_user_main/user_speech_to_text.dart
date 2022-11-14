@@ -58,33 +58,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
   }
 
   Future<void> _saveNote(BuildContext context) async {
-    Fluttertoast.showToast(
-        msg: 'Guardando nota...', gravity: ToastGravity.CENTER);
-    try {
-      final title = stringToBase64.encode('Voz a Texto');
-      final description = stringToBase64.encode(lastWords.text);
-      final createAt = DateTime.now().toIso8601String();
-      final userId = supabase.auth.currentUser!.id;
-
-      final data = {
-        'id_notes_user': userId,
-        'create_at': createAt,
-        'title': title,
-        'description': description
-      };
-      await supabase.from('notes').insert(data);
-      if (mounted) {
-        Fluttertoast.showToast(msg: 'Nota guardada');
-      }
-    } catch (e) {
-      if (e.toString().contains('ergjvwwsxxowhfbktrnj.supabase.co')) {
-        Fluttertoast.showToast(
-            msg: 'Revise su conexión a Internet', backgroundColor: Colors.red);
-      }
-    }
-    setState(() {
-      lastWords.clear();
-    });
+    //almacenar internamente
   }
 
   Widget _buttonGroupOptions() {

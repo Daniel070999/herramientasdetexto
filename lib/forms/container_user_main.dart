@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContainerUserMain extends StatefulWidget {
   const ContainerUserMain({super.key});
@@ -12,6 +13,40 @@ class ContainerUserMain extends StatefulWidget {
 }
 
 class _ContainerUserMainState extends State<ContainerUserMain> {
+  late bool animationState = true;
+
+  Future<void> _savePreferencesAnimation() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('animation', animationState);
+  }
+
+  Future<void> _savePreferencesTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('theme', theme);
+  }
+
+  Future<void> _readPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? animationSave = prefs.getBool('animation');
+    bool? themeSave = prefs.getBool('theme');
+    if (animationSave != null) {
+      setState(() {
+        animationState = animationSave;
+      });
+    }
+    if (themeSave != null) {
+      setState(() {
+        theme = themeSave;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _readPreferences();
+    super.initState();
+  }
+
   Widget _buttonGroupUp() {
     return Row(
       children: <Widget>[
@@ -262,12 +297,56 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
     );
   }
 
+  Future<void> animaciones() async {}
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
-      home: Container(
+      home: Scaffold(
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.movie_filter_outlined),
+              tooltip: 'Animaciones',
+              onPressed: () {
+                setState(() {
+                  animationState = !animationState;
+                });
+                _savePreferencesAnimation();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.wb_sunny_outlined),
+              tooltip: 'Modo oscuro',
+              onPressed: () {
+                setState(() {
+                  setState(() {
+                    theme = !theme;
+                  });
+                  _savePreferencesTheme();
+                });
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.navigate_next_rounded),
+              tooltip: 'Acerca de la aplicación',
+              onPressed: () {
+                acerca(context);
+              },
+            ),
+          ],
+          title: const Text(
+            'Menu principal',
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: barColor(),
+            ),
+          ),
+        ),
+        body: Container(
             color: Colors.grey.withOpacity(0.2),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -280,6 +359,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                 ],
               ),
             )),
-      );
+      ),
+    );
   }
 }
