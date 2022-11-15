@@ -31,12 +31,12 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
   Future<void> _saveNote(BuildContext context) async {
-   //almacenar internamente
+    //almacenar internamente
   }
 
   Future<void> _updateNote(BuildContext context, String titleUpdate,
       String descriptionUpdate, String idUpdate) async {
-        //actualizar internamente
+    //actualizar internamente
   }
 
   Future<List> getNotes() async {
@@ -342,7 +342,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
       transitionDuration: const Duration(milliseconds: 400),
     );
   }
-
+//ya no se usa 
   Future showButtomNewNote() {
     return showModalBottomSheet(
       isScrollControlled: true,
@@ -680,7 +680,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
           children: [
             FloatingActionButton.extended(
               onPressed: () {
-                showButtomNewNote();
+                writwNote(context);
               },
               icon: const Icon(Icons.text_snippet_outlined),
               label: const Text('Escribir'),

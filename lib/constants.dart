@@ -8,14 +8,19 @@ import 'package:fluttersupabase/pages_user_main/user_read_qr_android.dart';
 import 'package:fluttersupabase/pages_user_main/user_read_qr_ios.dart';
 import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 import 'package:fluttersupabase/pages_user_main/user_translate.dart';
+import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-
 late bool theme = false;
+writwNote(BuildContext context) async {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>  WriteNote(),
+      ));
+}
 
 acerca(BuildContext context) async {
   Navigator.push(

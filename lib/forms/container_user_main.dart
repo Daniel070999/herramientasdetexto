@@ -142,7 +142,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                       flex: 3,
                       child: Lottie.asset(
                         'images/lottie/translate.zip',
-                        repeat: animationState,
+                        animate: animationState,
                       ),
                     ),
                     const Expanded(flex: 1, child: Text("TRADUCTOR DE TEXTO")),
@@ -241,7 +241,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                     Expanded(
                       flex: 3,
                       child: Lottie.asset('images/lottie/speaker.zip',
-                          repeat: animationState, fit: BoxFit.contain),
+                          animate: animationState, fit: BoxFit.contain),
                     ),
                     const Expanded(flex: 1, child: Text("TEXTO A VOZ")),
                   ],

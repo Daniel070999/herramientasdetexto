@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttersupabase/pages_user_main/user_translate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
