@@ -14,11 +14,11 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late bool theme = false;
-writwNote(BuildContext context) async {
+writeNote(BuildContext context, int? id) async {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>  WriteNote(),
+        builder: (context) =>  WriteNote(id),
       ));
 }
 
@@ -46,11 +46,11 @@ speechToText(BuildContext context) async {
       ));
 }
 
-textToSpeech(BuildContext context) async {
+textToSpeech(BuildContext context, String? text) async {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TextToSpeechPage(),
+        builder: (context) => TextToSpeechPage(text),
       ));
 }
 
@@ -70,11 +70,11 @@ scannerQRIOS(BuildContext context) async {
       ));
 }
 
-translate(BuildContext context) async {
+translate(BuildContext context, String? text) async {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Translate(),
+        builder: (context) => Translate(text),
       ));
 }
 

@@ -245,9 +245,7 @@ class _TextImageState extends State<TextImage> {
                                 ),
                                 onPressed: () {
                                   if (scannedText.text.isNotEmpty) {
-                                    Navigator.pushNamed(
-                                        context, '/textToSpeech',
-                                        arguments: scannedText.text);
+                                    textToSpeech(context, scannedText.text);
                                   }
                                 },
                                 child: const Center(
@@ -279,8 +277,7 @@ class _TextImageState extends State<TextImage> {
                                 ),
                                 onPressed: () {
                                   if (scannedText.text.isNotEmpty) {
-                                    Navigator.pushNamed(context, '/translate',
-                                        arguments: scannedText.text);
+                                    translate(context, scannedText.text);
                                   }
                                 },
                                 child: const Center(

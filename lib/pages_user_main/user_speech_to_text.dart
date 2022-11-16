@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:fluttersupabase/note.dart';
+import 'package:fluttersupabase/notes_db.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
@@ -57,8 +60,18 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
     }
   }
 
-  Future<void> _saveNote(BuildContext context) async {
-    //almacenar internamente
+  Future _saveNote() async {
+    String description = '[{"insert":"' + lastWords.text + '\\n' + '"}]';
+    final note = Note(
+      title: 'Voz a texto',
+      isImportant: true,
+      number: 1,
+      description: description,
+      createdTime: DateTime.now(),
+    );
+    await NotesDatabase.instance.create(note);
+    Fluttertoast.showToast(msg: 'Nota creada');
+    lastWords.clear();
   }
 
   Widget _buttonGroupOptions() {
@@ -74,7 +87,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
                 if (lastWords.text.isEmpty) {
                   Fluttertoast.showToast(msg: 'No hay nada para guardar');
                 } else {
-                  _saveNote(context);
+                  _saveNote();
                 }
               },
               child: Card(
@@ -113,8 +126,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
                 if (lastWords.text.isEmpty) {
                   Fluttertoast.showToast(msg: 'No hay nada para traducir');
                 } else {
-                  Navigator.pushNamed(context, '/translate',
-                      arguments: lastWords.text);
+                  translate(context, lastWords.text);
                 }
               },
               child: Card(

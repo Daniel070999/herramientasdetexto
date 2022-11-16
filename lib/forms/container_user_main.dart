@@ -130,7 +130,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
-                translate(context);
+                translate(context, null);
               },
               child: Card(
                 elevation: 5,
@@ -230,7 +230,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
-                textToSpeech(context);
+                textToSpeech(context, null);
               },
               child: Card(
                 elevation: 5,

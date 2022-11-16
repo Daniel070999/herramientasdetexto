@@ -7,6 +7,8 @@ import 'package:fluttersupabase/constants.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
 class TextToSpeechPage extends StatefulWidget {
+  String? textIn;
+  TextToSpeechPage(this.textIn);
   @override
   _TextToSpeechPageState createState() => _TextToSpeechPageState();
 }
@@ -37,6 +39,12 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initLanguages();
     });
+    if (widget.textIn != null) {
+      setState(() {
+        text = widget.textIn!;
+        textEditingControllerTS.text = widget.textIn!;
+      });
+    }
   }
 
   Future<void> initLanguages() async {
@@ -163,12 +171,6 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
               onTap: () {
                 setState(() {
                   textEditingControllerTS.clear();
-                  //se revarga toda la página para evitar problemas con los parámetros
-                  //que son traidos desde la ventana TRANSLATE
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => super.widget));
                 });
               },
               child: Card(
@@ -276,13 +278,6 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
 
   @override
   Widget build(BuildContext context) {
-    Object? parametros = ModalRoute.of(context)!.settings.arguments;
-    if (parametros != null) {
-      setState(() {
-        text = parametros.toString();
-        textEditingControllerTS.text = parametros.toString();
-      });
-    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),

@@ -4,6 +4,7 @@ import 'package:fluttersupabase/forms/container_user_main.dart';
 import 'package:fluttersupabase/pages_user_main/user_main.dart';
 import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 import 'package:fluttersupabase/pages_user_main/user_translate.dart';
+import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -34,9 +35,6 @@ class _MyAppState extends State<MyApp> {
       theme: themeSelect(),
       initialRoute: '/main',
       routes: <String, WidgetBuilder>{
-        '/userMain': (context) => UserMain(),
-        '/translate': (context) => const Translate(),
-        '/textToSpeech': (context) => TextToSpeechPage(),
         '/main': (context) => const ContainerUserMain(),
       },
     );

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:fluttersupabase/note.dart';
 import 'package:fluttersupabase/notes_db.dart';
+import 'package:fluttersupabase/pages_user_main/user_new_note.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,6 +25,8 @@ enum _SelectionType {
 }
 
 class WriteNote extends StatefulWidget {
+  int? idNote;
+  WriteNote(this.idNote);
   @override
   _WriteNoteState createState() => _WriteNoteState();
 }
@@ -35,18 +39,17 @@ class _WriteNoteState extends State<WriteNote> {
   Timer? _selectAllTimer;
   _SelectionType _selectionType = _SelectionType.none;
   bool stateToolbar = true;
-  bool updateNote = false;
+  bool noteUpdating = false;
+  bool saveNote = false;
+  Note? note;
 
   @override
   void dispose() {
     _selectAllTimer?.cancel();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadFromAssets();
+    if (widget.idNote != null) {
+      updateNote();
+    }
   }
 
   Future<void> _loadFromAssets() async {
@@ -68,72 +71,204 @@ class _WriteNoteState extends State<WriteNote> {
     }
   }
 
+  Future<void> _loadNote() async {
+    int id = widget.idNote as int;
+    note = await NotesDatabase.instance.readNote(id);
+    var descriptionSave = jsonDecode(note!.description);
+    setState(() {
+      _titleController.text = note!.title;
+      _controllerDescription = QuillController(
+        document: Document.fromJson(descriptionSave),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+      noteUpdating = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFromAssets();
+    if (widget.idNote != null) {
+      _loadNote();
+    }
+  }
+
+  Widget _showAnimateOnBackPress(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(
+        Icons.warning_amber_rounded,
+        size: 50.0,
+      ),
+      iconColor: Colors.red,
+      actionsAlignment: MainAxisAlignment.center,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: const <Widget>[
+            Center(
+              child: Text(
+                '¿Salir sin guardar?',
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.red),
+          ),
+          child: const Text(
+            'Salir',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.grey),
+          ),
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
+
+  void _onBackPress() {
+    showGeneralDialog(
+      context: this.context,
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.fastOutSlowIn.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: _showAnimateOnBackPress(ctx),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 400),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_controllerDescription == null) {
       return const Scaffold(body: Center(child: Text('Cargando...')));
     }
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: themeSelect(),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Notas',
-          ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(gradient: barColor()),
-          ),
-          actions: [
-            Row(
-              children: [
-                const Text('Herramientas'),
-                Switch(
-                  value: stateToolbar,
-                  onChanged: (value) {
-                    setState(() {
-                      stateToolbar = value;
-                    });
-                  },
-                )
-              ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (saveNote == true) {
+          _onBackPress();
+        }
+        return true;
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: themeSelect(),
+        home: Scaffold(
+          appBar: AppBar(
+            leading: Center(
+              child: GestureDetector(
+                onTap: () {
+                  if (saveNote == true && noteUpdating == false) {
+                    _onBackPress();
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Icon(Icons.navigate_before),
+              ),
             ),
-          ],
-        ),
-        body: Container(
-            color: Colors.grey.withOpacity(0.2),
-            child: _buildWelcomeEditor(context)),
-        floatingActionButton: FloatingActionButton.extended(
-          label: const Text('Guardar'),
-          icon: const Icon(Icons.save_outlined),
-          onPressed: () async {
-            addNote();
-            /*if (_titleValidate.currentState!.validate()) {
-              final txt = jsonEncode(
-                _controllerDescription?.document.toDelta().toJson());
-              Fluttertoast.showToast(
-                msg: _titleController.text + "\n" + txt.toString());
-              setState(() {
-               updateNote = false;
-              });
-            }*/
-          },
+            title: Text(
+              noteUpdating ? 'Actualizando nota' : 'Nueva nota',
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(gradient: barColor()),
+            ),
+            actions: [
+              Row(
+                children: [
+                  const Text('Herramientas'),
+                  Switch(
+                    value: stateToolbar,
+                    onChanged: (value) {
+                      setState(() {
+                        stateToolbar = value;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ],
+          ),
+          body: Container(
+              color: Colors.grey.withOpacity(0.2),
+              child: _buildWelcomeEditor(context)),
+          floatingActionButton: noteUpdating
+              ? null
+              : FloatingActionButton.extended(
+                  label: const Text('Guardar'),
+                  icon: const Icon(Icons.save_outlined),
+                  onPressed: () {
+                    if (_titleValidate.currentState!.validate()) {
+                      addNote();
+                      Fluttertoast.showToast(msg: 'Nota creada');
+                      Navigator.pop(context);
+                      setState(() {
+                        _titleController.clear();
+                        _controllerDescription?.clear();
+                      });
+                    }
+                  },
+                ),
         ),
       ),
     );
   }
 
   Future addNote() async {
+    final description =
+        jsonEncode(_controllerDescription?.document.toDelta().toJson());
     final note = Note(
-      title: 'title',
+      title: _titleController.text,
       isImportant: true,
       number: 1,
-      description: 'asd',
+      description: description,
       createdTime: DateTime.now(),
     );
-
     await NotesDatabase.instance.create(note);
+  }
+
+  Future updateNote() async {
+    final description =
+        jsonEncode(_controllerDescription?.document.toDelta().toJson());
+    final noteUpdate = note!.copy(
+      isImportant: null,
+      number: null,
+      title: _titleController.text,
+      description: description,
+    );
+
+    await NotesDatabase.instance.update(noteUpdate);
   }
 
   Widget _buildWelcomeEditor(BuildContext context) {
@@ -142,7 +277,7 @@ class _WriteNoteState extends State<WriteNote> {
       child: TextFormField(
         onChanged: (value) {
           setState(() {
-            updateNote = true;
+            saveNote = true;
           });
         },
         validator: (value) {
@@ -155,20 +290,9 @@ class _WriteNoteState extends State<WriteNote> {
         maxLines: 1,
         cursorColor: Colors.black,
         style: const TextStyle(color: Colors.black),
-        decoration: InputDecoration(
-          labelText: "Título",
-          labelStyle: const TextStyle(color: Colors.black),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25.0),
-            borderSide: const BorderSide(
-              color: Colors.grey,
-              width: 1.5,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey, width: 2.0),
-            borderRadius: BorderRadius.circular(25.0),
-          ),
+        decoration: const InputDecoration(
+          hintText: 'Título',
+          labelStyle: TextStyle(color: Colors.black),
         ),
       ),
     );

@@ -8,8 +8,8 @@ import 'package:translator/translator.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class Translate extends StatefulWidget {
-  const Translate({super.key});
-
+  String? textIn;
+  Translate(this.textIn, {super.key});
   @override
   State<Translate> createState() => _TranslateState();
 }
@@ -215,13 +215,17 @@ class _TranslateState extends State<Translate> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    Object? parametros = ModalRoute.of(context)!.settings.arguments;
-    if (parametros != null) {
+  void initState() {
+    super.initState();
+    if (widget.textIn != null) {
       setState(() {
-        _textInput.text = parametros.toString();
+        _textInput.text = widget.textIn!;
       });
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
@@ -355,9 +359,7 @@ class _TranslateState extends State<Translate> {
                                     ),
                                     onPressed: () {
                                       if (_textOutput.text.isNotEmpty) {
-                                        Navigator.pushNamed(
-                                            context, '/textToSpeech',
-                                            arguments: _textOutput.text);
+                                        textToSpeech(context, _textOutput.text);
                                       }
                                     },
                                     child: const Center(
@@ -474,14 +476,6 @@ class _TranslateState extends State<Translate> {
                                       setState(() {
                                         _textInput.clear();
                                         _textOutput.clear();
-                                        //se revarga toda la página para evitar problemas con los parámetros
-                                        //que son traidos desde la ventana TRANSLATE
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        super.widget));
                                       });
                                     },
                                     child: const Center(

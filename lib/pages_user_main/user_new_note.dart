@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttersupabase/note.dart';
+import 'package:fluttersupabase/notes_db.dart';
+import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -14,8 +17,6 @@ class NewNote extends StatefulWidget {
   @override
   State<NewNote> createState() => _NewNoteState();
 }
-
-List<dynamic> data = [];
 
 class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   final _titleController = TextEditingController();
@@ -29,39 +30,17 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   bool _titleUpdate = false;
   bool _descriptionUpdate = false;
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
+  late List<Note> notes = [];
   Future<void> _saveNote(BuildContext context) async {
     //almacenar internamente
   }
 
-  Future<void> _updateNote(BuildContext context, String titleUpdate,
-      String descriptionUpdate, String idUpdate) async {
-    //actualizar internamente
-  }
-
-  Future<List> getNotes() async {
-    setState(() {
-      _loadingNotes = true;
-    });
-    //almacenar internamente
-    setState(() {
-      _loadingNotes = false;
-    });
-    return data;
-  }
-
-  Future<void> _deleteNote(BuildContext context, String idUpdate) async {
-    showLoaderDialog(context, 'Eliminando nota', 'images/lottie/delete.zip');
-    try {
-      //almacenar internamente
-    } catch (e) {
-      if (e.toString().contains('ergjvwwsxxowhfbktrnj.supabase.co')) {
-        Fluttertoast.showToast(
-            msg: 'Revise su conexión a internet', backgroundColor: Colors.red);
-      }
-    }
+  Future<void> _deleteNote(BuildContext context, int idUpdate) async {
+    await NotesDatabase.instance.delete(idUpdate);
     if (mounted) {
       Navigator.pop(context);
+      Fluttertoast.showToast(msg: 'Nota eliminada');
+      refreshNotes();
     }
   }
 
@@ -115,139 +94,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     );
   }
 
-  Widget _showAnimateNote(BuildContext context, String titleUpdate,
-      String descriptionUpdate, String idUpdate) {
-    return AlertDialog(
-      actionsAlignment: MainAxisAlignment.center,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _validateNoteUpdate,
-            child: Column(children: [
-              TextFormField(
-                onChanged: (value) {
-                  if (value != titleUpdate) {
-                    setState(() {
-                      _titleUpdate = true;
-                      titleUpdate = value;
-                    });
-                  }
-                },
-                initialValue: titleUpdate,
-                maxLines: 1,
-                cursorColor: Colors.black,
-                validator: (value) {
-                  titleUpdate = value.toString();
-                  if (value.toString().isEmpty) {
-                    return 'Este campo es obligatorio';
-                  }
-                  return null;
-                },
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  labelText: "Título",
-                  labelStyle: const TextStyle(color: Colors.black),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.grey, width: 2.0),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  if (value != descriptionUpdate) {
-                    setState(() {
-                      _descriptionUpdate = true;
-                    });
-                  }
-                  return;
-                },
-                validator: (value) {
-                  descriptionUpdate = value.toString();
-                },
-                initialValue: descriptionUpdate,
-                maxLines: 10,
-                cursorColor: Colors.black,
-                keyboardType: TextInputType.multiline,
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  labelText: "Descripción",
-                  labelStyle: const TextStyle(color: Colors.black),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.grey, width: 2.0),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-              ),
-            ]),
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.lightGreen),
-          ),
-          child: const Text(
-            'Actualizar',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            if (_validateNoteUpdate.currentState!.validate()) {
-              _updateNote(context, titleUpdate, descriptionUpdate, idUpdate);
-            }
-          },
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.red),
-          ),
-          child: const Text(
-            'Cerrar',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            if (_titleUpdate != true) {
-              if (_descriptionUpdate != true) {
-                Navigator.of(context).pop();
-              } else {
-                _confirmNoUpdate(context);
-              }
-            } else {
-              _confirmNoUpdate(context);
-            }
-          },
-        ),
-      ],
-    );
-  }
-
-  void _viewDeleteNote(String titleUpdate, String idUpdate) {
+  void _viewDeleteNote(String titleUpdate, int idUpdate) {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
@@ -265,7 +112,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   }
 
   Widget _showAnimateDeleteNote(
-      BuildContext context, String titleUpdate, String idUpdate) {
+      BuildContext context, String titleUpdate, int idUpdate) {
     return AlertDialog(
       icon: const Icon(
         Icons.warning_rounded,
@@ -325,24 +172,9 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   }
 
   Future<void> _viewNote(BuildContext context, String titleUpdate,
-      String descriptionUpdate, String idUpdate) async {
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (ctx, a1, a2) {
-        return Container();
-      },
-      transitionBuilder: (ctx, a1, a2, child) {
-        var curve = Curves.fastOutSlowIn.transform(a1.value);
-        return Transform.scale(
-          scale: curve,
-          child:
-              _showAnimateNote(ctx, titleUpdate, descriptionUpdate, idUpdate),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 400),
-    );
-  }
-//ya no se usa 
+      String descriptionUpdate, String idUpdate) async {}
+
+//ya no se usa
   Future showButtomNewNote() {
     return showModalBottomSheet(
       isScrollControlled: true,
@@ -506,15 +338,17 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> _refresh() async {
-    setState(() {
-      getNotes();
-    });
+  Future refreshNotes() async {
+    setState(() => _loadingNotes = true);
+
+    this.notes = await NotesDatabase.instance.readAllNotes();
+
+    setState(() => _loadingNotes = false);
   }
 
   @override
   void initState() {
-    getNotes();
+    refreshNotes();
     super.initState();
   }
 
@@ -525,6 +359,14 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
       theme: themeSelect(),
       home: Scaffold(
         appBar: AppBar(
+          leading: Center(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.navigate_before),
+            ),
+          ),
           title: const Text(
             'Notas',
           ),
@@ -535,135 +377,96 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
         body: Container(
             color: Colors.grey.withOpacity(0.2),
             child: (_loadingNotes == false)
-                ? (data.isEmpty)
+                ? (notes.isEmpty)
                     ? Center(
                         child: RefreshIndicator(
-                          onRefresh: _refresh,
+                          onRefresh: refreshNotes,
                           child: ListView(
                             shrinkWrap: true,
                             children: [
                               Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text('No tiene notas creadas'),
-                                    Lottie.asset('images/lottie/empty.zip',
-                                        repeat: false),
-                                    const Divider(
-                                        height: 50,
-                                        color: Colors.grey,
-                                        thickness: 1,
-                                        endIndent: 20,
-                                        indent: 20),
-                                    const Text(
-                                        'Puede crear su primera nota en esta parte'),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Lottie.asset(
-                                          'images/lottie/arrowdown.zip',
-                                          height: 150,
-                                          width: 150,
-                                        ),
-                                      ],
-                                    ),
-                                  ]),
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text('No tiene notas creadas'),
+                                  Lottie.asset('images/lottie/empty.zip',
+                                      repeat: false),
+                                  const Divider(
+                                      height: 50,
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                      endIndent: 20,
+                                      indent: 20),
+                                  const Text(
+                                      'Puede crear su primera nota en esta parte'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Lottie.asset(
+                                        'images/lottie/arrowdown.zip',
+                                        height: 150,
+                                        width: 150,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
                       )
                     : RefreshIndicator(
-                        onRefresh: _refresh,
+                        onRefresh: refreshNotes,
                         child: ListView.builder(
-                          itemCount: data.length,
+                          itemCount: notes.length,
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                const SizedBox(
-                                  height: 5.0,
-                                ),
-                                Slidable(
-                                  key: const ValueKey(0),
-                                  startActionPane: ActionPane(
-                                    motion: const ScrollMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(50),
-                                            bottomLeft: Radius.circular(50)),
-                                        onPressed: (context) {
-                                          _newTitleUpdate = stringToBase64
-                                              .decode(data[index]['title']);
-                                          _newIdNoteUpdate = data[index]['id'];
-                                          _viewDeleteNote(_newTitleUpdate,
-                                              _newIdNoteUpdate);
-                                        },
-                                        backgroundColor: Colors.red,
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.delete,
-                                        label: 'Eliminar',
-                                      ),
-                                      SlidableAction(
-                                        onPressed: (context) {
-                                          // ignore: prefer_interpolation_to_compose_strings
-                                          Share.share('*' +
-                                              stringToBase64
-                                                  .decode(data[index]['title'])
-                                                  .toString()
-                                                  .trimRight() +
-                                              '*' +
-                                              '\n' +
-                                              stringToBase64.decode(
-                                                  data[index]['description']));
-                                        },
-                                        backgroundColor: Colors.lightBlue,
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.share,
-                                        label: 'Compartir',
-                                      ),
-                                    ],
+                            final note = notes[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, right: 10.0),
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 5.0,
                                   ),
-                                  child: Container(
+                                  Container(
                                     decoration: const BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(50),
-                                          topRight: Radius.circular(50)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(25.0)),
                                     ),
                                     child: ListTile(
-                                      leading: const IconTheme(
-                                        data: IconThemeData(color: Colors.grey),
-                                        child: Icon(Icons.swipe_right_outlined),
-                                      ),
                                       onLongPress: () {
-                                        //agregar para ver la fecha de creacion de nota
+                                        _viewDeleteNote(
+                                            note.title, note.id!.toInt());
                                       },
                                       onTap: () {
-                                        _newTitleUpdate = stringToBase64
-                                            .decode(data[index]['title']);
-                                        _newDescriptionUpdate = stringToBase64
-                                            .decode(data[index]['description']);
-                                        _newIdNoteUpdate = data[index]['id'];
-                                        _viewNote(
-                                            context,
-                                            _newTitleUpdate,
-                                            _newDescriptionUpdate,
-                                            _newIdNoteUpdate);
+                                        int id = note.id!.toInt();
+                                        writeNote(context, id);
                                       },
                                       minVerticalPadding: 10,
-                                      title: Text(stringToBase64
-                                          .decode(data[index]['title'])),
-                                      subtitle: Text(stringToBase64
-                                          .decode(data[index]['description'])),
+                                      title: Text(
+                                        note.title,
+                                        style: const TextStyle(fontSize: 18.0),
+                                      ),
+                                      trailing: Text(
+                                        'Fecha: ' +
+                                            note.createdTime
+                                                .toIso8601String()
+                                                .replaceAll(
+                                                    RegExp('T'), '\nHora: ')
+                                                .replaceRange(25, null, ''),
+                                        style: TextStyle(fontSize: 12.0),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 5.0,
-                                )
-                              ],
+                                  const SizedBox(
+                                    height: 5.0,
+                                  )
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -680,7 +483,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
           children: [
             FloatingActionButton.extended(
               onPressed: () {
-                writwNote(context);
+                writeNote(context, null);
               },
               icon: const Icon(Icons.text_snippet_outlined),
               label: const Text('Escribir'),

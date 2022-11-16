@@ -167,9 +167,7 @@ class _ReadPDFState extends State<ReadPDF> {
                                         ),
                                         onPressed: () {
                                           if (_textInput.text.isNotEmpty) {
-                                            Navigator.pushNamed(
-                                                context, '/textToSpeech',
-                                                arguments: _textInput.text);
+                                            textToSpeech(context, _textInput.text);
                                           }
                                         },
                                         child: const Center(
@@ -204,9 +202,7 @@ class _ReadPDFState extends State<ReadPDF> {
                                         ),
                                         onPressed: () {
                                           if (_textInput.text.isNotEmpty) {
-                                            Navigator.pushNamed(
-                                                context, '/translate',
-                                                arguments: _textInput.text);
+                                            translate(context,_textInput.text);
                                           }
                                         },
                                         child: const Center(
