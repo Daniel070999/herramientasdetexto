@@ -1,6 +1,7 @@
 import 'package:fluttersupabase/note.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
 
 class NotesDatabase {
   static final NotesDatabase instance = NotesDatabase._init();

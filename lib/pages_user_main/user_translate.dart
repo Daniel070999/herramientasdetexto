@@ -1,10 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pdf_text/pdf_text.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:translator/translator.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class Translate extends StatefulWidget {
@@ -229,6 +223,7 @@ class _TranslateState extends State<Translate> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(

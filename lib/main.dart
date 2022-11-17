@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
-import 'package:fluttersupabase/forms/container_user_main.dart';
-import 'package:fluttersupabase/pages_user_main/user_main.dart';
-import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
-import 'package:fluttersupabase/pages_user_main/user_translate.dart';
-import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   runApp(const MyApp());

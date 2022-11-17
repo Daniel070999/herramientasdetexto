@@ -1,20 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:animate_icons/animate_icons.dart';
-import 'package:animations/animations.dart';
-import 'package:auto_animated/auto_animated.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fluttersupabase/note.dart';
-import 'package:fluttersupabase/notes_db.dart';
-import 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
-import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lottie/lottie.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:share_plus/share_plus.dart';
-
 class NewNote extends StatefulWidget {
   const NewNote({super.key});
 
@@ -193,6 +179,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           actions: [
@@ -362,6 +349,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
           ),
           children: [
             OpenContainer(
+              closedColor: Colors.lightGreen,
               closedShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(25.0),
@@ -380,6 +368,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
               },
             ),
             OpenContainer(
+              closedColor: Colors.lightGreen,
               closedShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(25.0),

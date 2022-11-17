@@ -1,21 +1,6 @@
-import 'dart:io';
 
-import 'package:animate_icons/animate_icons.dart';
-import 'package:animations/animations.dart';
-import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttersupabase/acerca.dart';
 import 'package:fluttersupabase/constants.dart';
-import 'package:fluttersupabase/pages_user_main/user_image_text.dart';
-import 'package:fluttersupabase/pages_user_main/user_new_note.dart';
-import 'package:fluttersupabase/pages_user_main/user_read_pdf.dart';
-import 'package:fluttersupabase/pages_user_main/user_read_qr_android.dart';
-import 'package:fluttersupabase/pages_user_main/user_read_qr_ios.dart';
-import 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
-import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
-import 'package:fluttersupabase/pages_user_main/user_translate.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ContainerUserMain extends StatefulWidget {
   const ContainerUserMain({super.key});
@@ -85,6 +70,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: OpenContainer(
+        closedColor: colorContainer(),
         closedShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(25.0),
@@ -153,6 +139,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           actions: <Widget>[
@@ -210,7 +197,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
               icon: OpenContainer(
                 closedBuilder: (context, action) {
                   return const Icon(
-                    Icons.star_border_purple500_sharp,
+                    Icons.navigate_next_rounded,
                     color: Colors.grey,
                   );
                 },
@@ -223,7 +210,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
             ),
           ],
           title: const Text(
-            'Menu principal',
+            'Menú principal',
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(

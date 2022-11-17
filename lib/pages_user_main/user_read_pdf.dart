@@ -1,8 +1,4 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pdf_text/pdf_text.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class ReadPDF extends StatefulWidget {
@@ -84,6 +80,7 @@ class _ReadPDFState extends State<ReadPDF> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
           appBar: AppBar(
             leading: IconButton(

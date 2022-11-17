@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_bar_scanner/qr_bar_scanner_camera.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class ReadQRIOS extends StatefulWidget {
@@ -41,6 +40,7 @@ class _ReadQRIOSState extends State<ReadQRIOS> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
           appBar: AppBar(
             leading: IconButton(

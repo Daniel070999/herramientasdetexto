@@ -1,13 +1,6 @@
-import 'dart:async';
-
-import 'package:flutter/services.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:fluttersupabase/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
-import 'package:share_plus/share_plus.dart';
 
 class ReadQRANDROID extends StatefulWidget {
   const ReadQRANDROID({super.key});
@@ -34,6 +27,7 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -345,8 +339,7 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                                 _inputController.clear();
                               }
                             } catch (e) {
-                              Fluttertoast.showToast(
-                                  msg: 'No se pudo guardar');
+                              Fluttertoast.showToast(msg: 'No se pudo guardar');
                             }
                           },
                           child: const Center(
@@ -512,8 +505,7 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
       String barcode = await scanner.scanPhoto();
       _outputController.text = barcode;
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'Intente con otro código');
+      Fluttertoast.showToast(msg: 'Intente con otro código');
     }
   }
 

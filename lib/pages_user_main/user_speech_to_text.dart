@@ -1,17 +1,5 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:fluttersupabase/note.dart';
-import 'package:fluttersupabase/notes_db.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lottie/lottie.dart';
-import 'package:speech_to_text/speech_recognition_error.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:fluttersupabase/constants.dart';
+import 'package:flutter/material.dart';
 
 class SpeechToTextPage extends StatefulWidget {
   @override
@@ -193,6 +181,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(

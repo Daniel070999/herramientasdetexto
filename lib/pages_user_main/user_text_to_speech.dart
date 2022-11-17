@@ -1,10 +1,5 @@
-import 'dart:async';
-
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
-import 'package:text_to_speech/text_to_speech.dart';
 
 class TextToSpeechPage extends StatefulWidget {
   String? textIn;
@@ -45,6 +40,12 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
         textEditingControllerTS.text = widget.textIn!;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    tts.stop();
+    super.dispose();
   }
 
   Future<void> initLanguages() async {
@@ -281,6 +282,7 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeSelect(),
+      title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -376,6 +378,7 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
   bool get supportResume => defaultTargetPlatform != TargetPlatform.android;
 
   void speak() {
+    Fluttertoast.showToast(msg: 'Cargando audio...', gravity: ToastGravity.CENTER);
     tts.setVolume(volume);
     tts.setRate(rate);
     if (languageCode != null) {

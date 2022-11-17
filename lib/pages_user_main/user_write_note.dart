@@ -1,23 +1,11 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_quill/extensions.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
-import 'package:fluttersupabase/constants.dart';
-import 'package:fluttersupabase/note.dart';
-import 'package:fluttersupabase/notes_db.dart';
-import 'package:fluttersupabase/pages_user_main/user_new_note.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// ignore_for_file: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+// ignore: unused_import
 import 'package:tuple/tuple.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:fluttersupabase/constants.dart';
 
 enum _SelectionType {
   none,
@@ -49,7 +37,7 @@ class _WriteNoteState extends State<WriteNote> {
     super.dispose();
     if (widget.idNote != null) {
       updateNote();
-    }else {
+    } else {
       if (_titleController.text.isNotEmpty && saveNote != false) {
         addNote();
       }
@@ -191,6 +179,7 @@ class _WriteNoteState extends State<WriteNote> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeSelect(),
+        title: 'Herramientas de texto',
         home: Scaffold(
           appBar: AppBar(
             leading: IconButton(
