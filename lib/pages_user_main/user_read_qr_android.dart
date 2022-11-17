@@ -36,6 +36,13 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
       theme: themeSelect(),
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.navigate_before),
+            tooltip: 'Regresar',
+          ),
           title: const Text(
             'Códigos QR y Códigos de barras',
           ),

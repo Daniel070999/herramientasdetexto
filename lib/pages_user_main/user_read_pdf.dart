@@ -86,6 +86,13 @@ class _ReadPDFState extends State<ReadPDF> {
       theme: themeSelect(),
       home: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.navigate_before),
+              tooltip: 'Regresar',
+            ),
             title: const Text(
               'Abrir PDF',
             ),
@@ -167,7 +174,8 @@ class _ReadPDFState extends State<ReadPDF> {
                                         ),
                                         onPressed: () {
                                           if (_textInput.text.isNotEmpty) {
-                                            textToSpeech(context, _textInput.text);
+                                            textToSpeech(
+                                                context, _textInput.text);
                                           }
                                         },
                                         child: const Center(
@@ -202,7 +210,7 @@ class _ReadPDFState extends State<ReadPDF> {
                                         ),
                                         onPressed: () {
                                           if (_textInput.text.isNotEmpty) {
-                                            translate(context,_textInput.text);
+                                            translate(context, _textInput.text);
                                           }
                                         },
                                         child: const Center(

@@ -24,15 +24,17 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       color: Colors.white,
       debugShowCheckedModeBanner: false,
       title: 'Herramientas de texto',
-      theme: themeSelect(),
+      theme: themeSelect().copyWith(
+          pageTransitionsTheme: const PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: ZoomPageTransitionsBuilder()
+          })),
       initialRoute: '/main',
       routes: <String, WidgetBuilder>{
         '/main': (context) => const ContainerUserMain(),

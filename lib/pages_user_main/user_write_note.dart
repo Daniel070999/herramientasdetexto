@@ -49,6 +49,10 @@ class _WriteNoteState extends State<WriteNote> {
     super.dispose();
     if (widget.idNote != null) {
       updateNote();
+    }else {
+      if (_titleController.text.isNotEmpty && saveNote != false) {
+        addNote();
+      }
     }
   }
 
@@ -128,7 +132,10 @@ class _WriteNoteState extends State<WriteNote> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            setState(() {
+              saveNote = false;
+            });
+            Navigator.pop(this.context);
             Navigator.pop(context);
           },
         ),
@@ -186,17 +193,16 @@ class _WriteNoteState extends State<WriteNote> {
         theme: themeSelect(),
         home: Scaffold(
           appBar: AppBar(
-            leading: Center(
-              child: GestureDetector(
-                onTap: () {
-                  if (saveNote == true && noteUpdating == false) {
-                    _onBackPress();
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Icon(Icons.navigate_before),
-              ),
+            leading: IconButton(
+              onPressed: () {
+                if (saveNote == true && noteUpdating == false) {
+                  _onBackPress();
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              icon: const Icon(Icons.navigate_before),
+              tooltip: 'Regresar',
             ),
             title: Text(
               noteUpdating ? 'Actualizando nota' : 'Nueva nota',
@@ -250,8 +256,6 @@ class _WriteNoteState extends State<WriteNote> {
         jsonEncode(_controllerDescription?.document.toDelta().toJson());
     final note = Note(
       title: _titleController.text,
-      isImportant: true,
-      number: 1,
       description: description,
       createdTime: DateTime.now(),
     );

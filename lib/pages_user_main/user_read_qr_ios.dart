@@ -43,6 +43,13 @@ class _ReadQRIOSState extends State<ReadQRIOS> {
       theme: themeSelect(),
       home: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.navigate_before),
+              tooltip: 'Regresar',
+            ),
             title: const Text(
               'Lector de códigos QR y Barras',
             ),

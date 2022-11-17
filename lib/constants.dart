@@ -1,3 +1,4 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/acerca.dart';
 import 'package:fluttersupabase/pages_user_main/user_read_pdf.dart';
@@ -18,7 +19,7 @@ writeNote(BuildContext context, int? id) async {
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>  WriteNote(id),
+        builder: (context) => WriteNote(id),
       ));
 }
 
@@ -94,6 +95,13 @@ textImage(BuildContext context) async {
       ));
 }
 
+const options = LiveOptions(
+  delay: Duration(milliseconds: 200),
+  showItemInterval: Duration(milliseconds: 200),
+  showItemDuration: Duration(milliseconds: 200),
+  visibleFraction: 0.05,
+  reAnimateOnVisibility: false,
+);
 Color menuBackgroundColor() {
   return theme ? Colors.grey.shade900 : Colors.green;
 }

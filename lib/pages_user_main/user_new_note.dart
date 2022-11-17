@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:animate_icons/animate_icons.dart';
+import 'package:animations/animations.dart';
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttersupabase/note.dart';
 import 'package:fluttersupabase/notes_db.dart';
+import 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
 import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -31,9 +35,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   bool _descriptionUpdate = false;
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
   late List<Note> notes = [];
-  Future<void> _saveNote(BuildContext context) async {
-    //almacenar internamente
-  }
+  late AnimateIconController controllerIcon;
 
   Future<void> _deleteNote(BuildContext context, int idUpdate) async {
     await NotesDatabase.instance.delete(idUpdate);
@@ -171,173 +173,6 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> _viewNote(BuildContext context, String titleUpdate,
-      String descriptionUpdate, String idUpdate) async {}
-
-//ya no se usa
-  Future showButtomNewNote() {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      backgroundColor: Colors.transparent,
-      transitionAnimationController: AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 400)),
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.indigo.withOpacity(1),
-                    Colors.teal.withOpacity(0.5),
-                    Colors.transparent,
-                  ]),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-                topRight: Radius.circular(50.0),
-              )),
-          padding: const EdgeInsets.all(30.0),
-          height: 700,
-          child: Form(
-            key: _validateTitle,
-            child: Center(
-              child: Column(
-                children: [
-                  TextFormField(
-                    maxLines: 1,
-                    cursorColor: Colors.white,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Este campo es obligatorio';
-                      }
-                    },
-                    style: const TextStyle(color: Colors.white),
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      labelText: "Título",
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  TextFormField(
-                    maxLines: 10,
-                    cursorColor: Colors.white,
-                    keyboardType: TextInputType.multiline,
-                    style: const TextStyle(color: Colors.white),
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: "Descripción",
-                      labelStyle: const TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      OutlinedButton(
-                        style: ButtonStyle(
-                          fixedSize:
-                              MaterialStateProperty.all(Size.fromWidth(150)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.lightGreen),
-                          overlayColor: MaterialStateProperty.all(
-                              Colors.lightGreen.shade200),
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
-                          ),
-                          side: MaterialStateProperty.all(
-                              const BorderSide(color: Colors.white)),
-                        ),
-                        onPressed: () {
-                          if (_validateTitle.currentState!.validate()) {
-                            _saveNote(context);
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Center(
-                                child: Text(
-                              'Guardar',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      OutlinedButton(
-                        style: ButtonStyle(
-                          fixedSize:
-                              MaterialStateProperty.all(Size.fromWidth(150)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.red.shade200),
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
-                          ),
-                          side: MaterialStateProperty.all(
-                              const BorderSide(color: Colors.white)),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _titleController.clear();
-                          _descriptionController.clear();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Center(
-                              child: Text(
-                                'Cancelar',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Future refreshNotes() async {
     setState(() => _loadingNotes = true);
 
@@ -349,6 +184,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   @override
   void initState() {
     refreshNotes();
+    controllerIcon = AnimateIconController();
     super.initState();
   }
 
@@ -359,13 +195,37 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
       theme: themeSelect(),
       home: Scaffold(
         appBar: AppBar(
-          leading: Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
+          actions: [
+            AnimateIcons(
+              startIcon: Icons.refresh_rounded,
+              endIcon: Icons.refresh_rounded,
+              controller: controllerIcon,
+              startTooltip: 'Recargar',
+              endTooltip: 'Recargar',
+              onStartIconPress: () {
+                setState(() {
+                  refreshNotes();
+                });
+                return true;
               },
-              child: const Icon(Icons.navigate_before),
+              onEndIconPress: () {
+                setState(() {
+                  refreshNotes();
+                });
+                return true;
+              },
+              duration: const Duration(milliseconds: 600),
+              startIconColor: Colors.white,
+              endIconColor: Colors.white,
+              clockwise: false,
             ),
+          ],
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.navigate_before),
+            tooltip: 'Regresar',
           ),
           title: const Text(
             'Notas',
@@ -417,59 +277,78 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
                           ),
                         ),
                       )
-                    : RefreshIndicator(
-                        onRefresh: refreshNotes,
-                        child: ListView.builder(
-                          itemCount: notes.length,
-                          itemBuilder: (context, index) {
-                            final note = notes[index];
-                            return Padding(
+                    : LiveList.options(
+                        options: options,
+                        itemCount: notes.length,
+                        // Like GridView.builder, but also includes animation property
+                        itemBuilder: (context, index, animation) {
+                          final note = notes[index];
+                          int id = note.id!.toInt();
+                          return FadeTransition(
+                            opacity: Tween<double>(
+                              begin: 0,
+                              end: 1,
+                            ).animate(animation),
+                            // And slide transition
+                            child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 5.0,
+                                  top: 10.0, left: 10.0, right: 10.0),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(0, -0.1),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                // Paste you Widget
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25.0)),
                                   ),
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                  child: OpenContainer(
+                                    closedShape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(25.0)),
-                                    ),
-                                    child: ListTile(
-                                      onLongPress: () {
-                                        _viewDeleteNote(
-                                            note.title, note.id!.toInt());
-                                      },
-                                      onTap: () {
-                                        int id = note.id!.toInt();
-                                        writeNote(context, id);
-                                      },
-                                      minVerticalPadding: 10,
-                                      title: Text(
-                                        note.title,
-                                        style: const TextStyle(fontSize: 18.0),
-                                      ),
-                                      trailing: Text(
-                                        'Fecha: ' +
-                                            note.createdTime
-                                                .toIso8601String()
-                                                .replaceAll(
-                                                    RegExp('T'), '\nHora: ')
-                                                .replaceRange(25, null, ''),
-                                        style: TextStyle(fontSize: 12.0),
+                                        Radius.circular(25.0),
                                       ),
                                     ),
+                                    transitionType:
+                                        ContainerTransitionType.fadeThrough,
+                                    closedBuilder: (BuildContext _,
+                                        VoidCallback openContainer) {
+                                      return ListTile(
+                                        onLongPress: () {
+                                          _viewDeleteNote(
+                                              note.title, note.id!.toInt());
+                                        },
+                                        onTap: openContainer,
+                                        title: Text(
+                                          note.title,
+                                          style:
+                                              const TextStyle(fontSize: 18.0),
+                                        ),
+                                        trailing: Text(
+                                          'Fecha: ' +
+                                              note.createdTime
+                                                  .toIso8601String()
+                                                  .replaceAll(
+                                                      RegExp('T'), '\nHora: ')
+                                                  .replaceRange(25, null, ''),
+                                          style: TextStyle(fontSize: 12.0),
+                                        ),
+                                      );
+                                    },
+                                    openBuilder:
+                                        (BuildContext _, VoidCallback __) {
+                                      return WriteNote(id);
+                                    },
                                   ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  )
-                                ],
+                                ),
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
+
+                        // Other properties correspond to the `ListView.builder` / `ListView.separated` widget
                       )
                 : Center(
                     child: Lottie.asset('images/lottie/searching.zip',
@@ -477,24 +356,47 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
                   )),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(
+          backgroundColor: Colors.lightBlue,
           overlayStyle: ExpandableFabOverlayStyle(
             blur: 0,
           ),
           children: [
-            FloatingActionButton.extended(
-              onPressed: () {
-                writeNote(context, null);
+            OpenContainer(
+              closedShape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
+                ),
+              ),
+              closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                return FloatingActionButton.extended(
+                  onPressed: openContainer,
+                  icon: const Icon(Icons.text_snippet_outlined),
+                  label: const Text('Escribir'),
+                  backgroundColor: Colors.lightGreen,
+                );
               },
-              icon: const Icon(Icons.text_snippet_outlined),
-              label: const Text('Escribir'),
+              openBuilder: (BuildContext _, VoidCallback __) {
+                return WriteNote(null);
+              },
             ),
-            FloatingActionButton.extended(
-              heroTag: null,
-              onPressed: () {
-                speechToText(context);
+            OpenContainer(
+              closedShape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
+                ),
+              ),
+              closedBuilder: (context, VoidCallback openContainer) {
+                return FloatingActionButton.extended(
+                  heroTag: null,
+                  onPressed: openContainer,
+                  icon: const Icon(Icons.keyboard_voice_outlined),
+                  label: const Text('Hablar'),
+                  backgroundColor: Colors.lightGreen,
+                );
               },
-              icon: const Icon(Icons.keyboard_voice_outlined),
-              label: const Text('Hablar'),
+              openBuilder: (context, VoidCallback __) {
+                return SpeechToTextPage();
+              },
             ),
           ],
         ),

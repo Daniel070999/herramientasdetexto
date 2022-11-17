@@ -64,8 +64,6 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
     String description = '[{"insert":"' + lastWords.text + '\\n' + '"}]';
     final note = Note(
       title: 'Voz a texto',
-      isImportant: true,
-      number: 1,
       description: description,
       createdTime: DateTime.now(),
     );
@@ -197,6 +195,13 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
       theme: themeSelect(),
       home: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.navigate_before),
+            tooltip: 'Regresar',
+          ),
           title: const Text(
             'Voz a texto',
           ),
