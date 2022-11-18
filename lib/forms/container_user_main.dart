@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
 
@@ -103,9 +102,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
               }
             : (index == 1)
                 ? (context, action) {
-                    return Platform.isAndroid
-                        ? const ReadQRANDROID()
-                        : const ReadQRIOS();
+                    return const ReadQRANDROID();
                   }
                 : (index == 2)
                     ? (context, action) {

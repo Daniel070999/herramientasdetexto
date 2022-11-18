@@ -15,7 +15,6 @@ export 'package:speech_to_text/speech_recognition_error.dart';
 export 'package:speech_to_text/speech_recognition_result.dart';
 export 'package:speech_to_text/speech_to_text.dart';
 //qrios
-export 'package:flutter_qr_bar_scanner/qr_bar_scanner_camera.dart';
 //qrandroid
 export 'package:image_gallery_saver/image_gallery_saver.dart';
 export 'package:permission_handler/permission_handler.dart';
@@ -51,7 +50,6 @@ export 'package:fluttersupabase/pages_user_main/user_image_text.dart';
 export 'package:fluttersupabase/pages_user_main/user_new_note.dart';
 export 'package:fluttersupabase/pages_user_main/user_read_pdf.dart';
 export 'package:fluttersupabase/pages_user_main/user_read_qr_android.dart';
-export 'package:fluttersupabase/pages_user_main/user_read_qr_ios.dart';
 export 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
 export 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 export 'package:fluttersupabase/pages_user_main/user_translate.dart';
@@ -66,7 +64,6 @@ import 'package:fluttersupabase/pages_user_main/user_speech_to_text.dart';
 import 'package:fluttersupabase/pages_user_main/user_image_text.dart';
 import 'package:fluttersupabase/pages_user_main/user_new_note.dart';
 import 'package:fluttersupabase/pages_user_main/user_read_qr_android.dart';
-import 'package:fluttersupabase/pages_user_main/user_read_qr_ios.dart';
 import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 import 'package:fluttersupabase/pages_user_main/user_translate.dart';
 import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
@@ -122,13 +119,6 @@ newNote(BuildContext context) async {
       ));
 }
 
-scannerQRIOS(BuildContext context) async {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ReadQRIOS(),
-      ));
-}
 
 translate(BuildContext context, String? text) async {
   Navigator.push(
