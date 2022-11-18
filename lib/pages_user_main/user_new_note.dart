@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttersupabase/constants.dart';
+
 class NewNote extends StatefulWidget {
   const NewNote({super.key});
 
@@ -27,7 +27,10 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     await NotesDatabase.instance.delete(idUpdate);
     if (mounted) {
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: 'Nota eliminada');
+      Fluttertoast.showToast(
+        msg: 'Nota eliminada',
+        backgroundColor: Colors.grey,
+      );
       refreshNotes();
     }
   }

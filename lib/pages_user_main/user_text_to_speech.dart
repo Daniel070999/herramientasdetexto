@@ -97,7 +97,14 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
-                speak();
+                if (textEditingControllerTS.text.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: 'No hay texto para escuchar',
+                    backgroundColor: Colors.grey,
+                  );
+                } else {
+                  speak();
+                }
               },
               child: Card(
                 elevation: 5,
@@ -378,7 +385,11 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
   bool get supportResume => defaultTargetPlatform != TargetPlatform.android;
 
   void speak() {
-    Fluttertoast.showToast(msg: 'Cargando audio...', gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(
+      msg: 'Cargando audio...',
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.grey,
+    );
     tts.setVolume(volume);
     tts.setRate(rate);
     if (languageCode != null) {

@@ -360,7 +360,12 @@ class _TranslateState extends State<Translate> {
                                               color: Colors.lightBlue)),
                                     ),
                                     onPressed: () {
-                                      if (_textOutput.text.isNotEmpty) {
+                                      if (_textOutput.text.isEmpty) {
+                                        Fluttertoast.showToast(
+                                          msg: 'No hay texto para escuchar',
+                                          backgroundColor: Colors.grey,
+                                        );
+                                      } else {
                                         textToSpeech(context, _textOutput.text);
                                       }
                                     },
@@ -397,7 +402,9 @@ class _TranslateState extends State<Translate> {
                                     onPressed: () {
                                       if (_textOutput.text.isEmpty) {
                                         Fluttertoast.showToast(
-                                            msg: 'No hay nada para copiar');
+                                          msg: 'No hay texto para compartir',
+                                          backgroundColor: Colors.grey,
+                                        );
                                       } else {
                                         Share.share(_textOutput.text);
                                       }
@@ -437,13 +444,16 @@ class _TranslateState extends State<Translate> {
                                     onPressed: () {
                                       if (_textOutput.text.isEmpty) {
                                         Fluttertoast.showToast(
-                                            msg: 'No hay nada para copiar');
+                                          msg: 'No hay texto para copiar',
+                                          backgroundColor: Colors.grey,
+                                        );
                                       } else {
                                         Clipboard.setData(ClipboardData(
                                             text: _textOutput.text));
                                         Fluttertoast.showToast(
-                                            msg: 'Se copió al portapepeles',
-                                            toastLength: Toast.LENGTH_SHORT);
+                                          msg: 'Se copió al portapepeles',
+                                          backgroundColor: Colors.grey,
+                                        );
                                       }
                                     },
                                     child: const Center(

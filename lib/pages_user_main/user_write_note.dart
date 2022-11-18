@@ -226,7 +226,10 @@ class _WriteNoteState extends State<WriteNote> {
                   onPressed: () {
                     if (_titleValidate.currentState!.validate()) {
                       addNote();
-                      Fluttertoast.showToast(msg: 'Nota creada');
+                      Fluttertoast.showToast(
+                        msg: 'Nota creada',
+                        backgroundColor: Colors.grey,
+                      );
                       Navigator.pop(context);
                       setState(() {
                         _titleController.clear();
@@ -282,10 +285,11 @@ class _WriteNoteState extends State<WriteNote> {
         controller: _titleController,
         maxLines: 1,
         cursorColor: Colors.black,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
         decoration: const InputDecoration(
           hintText: 'Título',
-          labelStyle: TextStyle(color: Colors.black),
+          hintStyle: TextStyle(color: Colors.grey),
         ),
       ),
     );

@@ -207,7 +207,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
             ),
           ],
           title: const Text(
-            'Menú principal',
+            'Herramientas de Texto',
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(

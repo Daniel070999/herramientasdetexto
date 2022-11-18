@@ -32,7 +32,10 @@ class _ReadPDFState extends State<ReadPDF> {
         _textInput.text = text;
       });
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Intenta con otro documento');
+      Fluttertoast.showToast(
+        msg: 'Intenta con otro documento',
+        backgroundColor: Colors.grey,
+      );
     }
   }
 
@@ -46,7 +49,11 @@ class _ReadPDFState extends State<ReadPDF> {
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
-                _pickPDFText(context);
+                try {
+                  _pickPDFText(context);
+                } catch (e) {
+                  Fluttertoast.showToast(msg: 'Intenta con otro documento');
+                }
               },
               child: Card(
                 elevation: 5,
@@ -170,7 +177,12 @@ class _ReadPDFState extends State<ReadPDF> {
                                                   color: Colors.lightBlue)),
                                         ),
                                         onPressed: () {
-                                          if (_textInput.text.isNotEmpty) {
+                                          if (_textInput.text.isEmpty) {
+                                            Fluttertoast.showToast(
+                                              msg: 'No hay texto para escuchar',
+                                              backgroundColor: Colors.grey,
+                                            );
+                                          } else {
                                             textToSpeech(
                                                 context, _textInput.text);
                                           }
@@ -206,7 +218,12 @@ class _ReadPDFState extends State<ReadPDF> {
                                                   color: Colors.lightBlue)),
                                         ),
                                         onPressed: () {
-                                          if (_textInput.text.isNotEmpty) {
+                                          if (_textInput.text.isEmpty) {
+                                            Fluttertoast.showToast(
+                                              msg: 'No hay texto para traducir',
+                                              backgroundColor: Colors.grey,
+                                            );
+                                          } else {
                                             translate(context, _textInput.text);
                                           }
                                         },
@@ -245,13 +262,16 @@ class _ReadPDFState extends State<ReadPDF> {
                                         onPressed: () {
                                           if (_textInput.text.isEmpty) {
                                             Fluttertoast.showToast(
-                                                msg: 'No hay nada para copiar');
+                                              msg: 'No hay nada para copiar',
+                                              backgroundColor: Colors.grey,
+                                            );
                                           } else {
                                             Clipboard.setData(ClipboardData(
                                                 text: _textInput.text));
                                             Fluttertoast.showToast(
-                                                msg:
-                                                    'Se copió al portapapeles');
+                                              msg: 'Se copió al portapapeles',
+                                              backgroundColor: Colors.grey,
+                                            );
                                           }
                                         },
                                         child: const Center(

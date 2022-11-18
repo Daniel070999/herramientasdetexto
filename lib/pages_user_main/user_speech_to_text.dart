@@ -56,7 +56,10 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
       createdTime: DateTime.now(),
     );
     await NotesDatabase.instance.create(note);
-    Fluttertoast.showToast(msg: 'Nota creada');
+    Fluttertoast.showToast(
+      msg: 'Nota creada',
+      backgroundColor: Colors.grey,
+    );
     lastWords.clear();
   }
 
@@ -71,7 +74,10 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
                 if (lastWords.text.isEmpty) {
-                  Fluttertoast.showToast(msg: 'No hay nada para guardar');
+                  Fluttertoast.showToast(
+                    msg: 'No hay nada para guardar',
+                    backgroundColor: Colors.grey,
+                  );
                 } else {
                   _saveNote();
                 }
@@ -110,7 +116,10 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
                 if (lastWords.text.isEmpty) {
-                  Fluttertoast.showToast(msg: 'No hay nada para traducir');
+                  Fluttertoast.showToast(
+                    msg: 'No hay nada para traducir',
+                    backgroundColor: Colors.grey,
+                  );
                 } else {
                   translate(context, lastWords.text);
                 }

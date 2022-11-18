@@ -100,7 +100,7 @@ class _AcercaAppState extends State<AcercaApp> {
                         height: 10.0,
                       ),
                       const Text(
-                        'En caso de encontrar fallas en la aplicación, con el propósito de evitar bajas calificaciones en la tienda de GOOGLE PLAY, por favor, enviar su comentario por correo electrónico. (danielixo99dev@gmail.com)',
+                        'En caso de encontrar fallas en la aplicación, con el propósito de evitar bajas calificaciones en la tienda de GOOGLE PLAY, por favor, enviar su comentario por correo electrónico.',
                         style: TextStyle(fontSize: 14),
                         textAlign: TextAlign.justify,
                       ),
