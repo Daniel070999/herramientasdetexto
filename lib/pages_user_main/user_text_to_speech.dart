@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class TextToSpeechPage extends StatefulWidget {
@@ -292,6 +293,7 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
       title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -310,70 +312,77 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
         ),
         body: Container(
           color: Colors.grey.withOpacity(0.2),
-          child: Center(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25.0),
-                              color: colorContainer()),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: TextFormField(
-                              onChanged: (String newText) {
-                                setState(() {
-                                  text = newText;
-                                });
-                              },
-                              maxLines: 15,
-                              cursorColor: Colors.blue,
-                              keyboardType: TextInputType.multiline,
-                              style: const TextStyle(color: Colors.black),
-                              controller: textEditingControllerTS,
-                              decoration: InputDecoration(
-                                labelText: "Ingrese un texto",
-                                labelStyle: const TextStyle(color: Colors.blue),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  borderSide: const BorderSide(
-                                    color: Colors.blue,
-                                    width: 1.5,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    color: colorContainer()),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: TextFormField(
+                                    onChanged: (String newText) {
+                                      setState(() {
+                                        text = newText;
+                                      });
+                                    },
+                                    maxLines: 15,
+                                    cursorColor: Colors.blue,
+                                    keyboardType: TextInputType.multiline,
+                                    style: const TextStyle(color: Colors.black),
+                                    controller: textEditingControllerTS,
+                                    decoration: InputDecoration(
+                                      labelText: "Ingrese un texto",
+                                      labelStyle: const TextStyle(color: Colors.blue),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(25.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.blue,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: Colors.blue, width: 2.0),
+                                        borderRadius: BorderRadius.circular(25.0),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
                               ),
-                            ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  _listDown(context),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              _buttonGroupOptions(),
+                            ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            _listDown(context),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        _buttonGroupOptions(),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              adMob(adBannerTextToSpeech, adWidgetTextToSpeech)
+            ],
           ),
         ),
       ),

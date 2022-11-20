@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ContainerUserMain extends StatefulWidget {
   const ContainerUserMain({super.key});
@@ -36,14 +38,6 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
         theme = themeSave;
       });
     }
-  }
-
-  @override
-  void initState() {
-    _readPreferences();
-    controllerIcon1 = AnimateIconController();
-    controllerIcon2 = AnimateIconController();
-    super.initState();
   }
 
   List<String> images = [
@@ -132,6 +126,14 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
   }
 
   @override
+  void initState() {
+    _readPreferences();
+    controllerIcon1 = AnimateIconController();
+    controllerIcon2 = AnimateIconController();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -139,6 +141,7 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
       title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           actions: <Widget>[
             AnimateIcons(
               startIcon: Icons.pause,
@@ -216,29 +219,47 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
           ),
         ),
         body: Container(
-          color: Colors.grey.withOpacity(0.2),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: LiveGrid.options(
-              options: options,
-              itemBuilder: (context, index, animation) {
-                return FadeTransition(
-                  opacity: Tween<double>(
-                    begin: 0,
-                    end: 1,
-                  ).animate(animation),
-                  child: SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, -0.1),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: menu(images[index], titles[index], index),
+          decoration: BoxDecoration(
+            gradient: barColor(),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: LiveGrid.options(
+                      options: options,
+                      itemBuilder: (context, index, animation) {
+                        return FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 0,
+                            end: 1,
+                          ).animate(animation),
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0, -0.1),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: menu(images[index], titles[index], index),
+                          ),
+                        );
+                      },
+                      itemCount: images.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                    ),
                   ),
-                );
-              },
-              itemCount: images.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                  adMob(adBannerMenuPrincipal, adWidgetMenuPrincipal),
+                ],
               ),
             ),
           ),

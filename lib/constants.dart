@@ -68,6 +68,7 @@ import 'package:fluttersupabase/pages_user_main/user_text_to_speech.dart';
 import 'package:fluttersupabase/pages_user_main/user_translate.dart';
 import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
 late bool theme = false;
@@ -118,7 +119,6 @@ newNote(BuildContext context) async {
         builder: (context) => const NewNote(),
       ));
 }
-
 
 translate(BuildContext context, String? text) async {
   Navigator.push(
@@ -268,5 +268,14 @@ showLoaderDialog(BuildContext context, String message, String ruteLottie) {
     builder: (BuildContext context) {
       return alert;
     },
+  );
+}
+
+Widget adMob(BannerAd adBannerNanem, AdWidget adWidgetName) {
+  return Container(
+    alignment: Alignment.center,
+    width: adBannerNanem.size.width.toDouble(),
+    height: adBannerNanem.size.height.toDouble(),
+    child: adWidgetName,
   );
 }

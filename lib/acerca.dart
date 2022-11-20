@@ -17,6 +17,7 @@ class _AcercaAppState extends State<AcercaApp> {
       title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

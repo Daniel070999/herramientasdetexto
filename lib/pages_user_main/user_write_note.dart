@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 // ignore: unused_import
@@ -182,6 +183,7 @@ class _WriteNoteState extends State<WriteNote> {
         title: 'Herramientas de texto',
         home: Scaffold(
           appBar: AppBar(
+          elevation: 0,
             leading: IconButton(
               onPressed: () {
                 if (saveNote == true && noteUpdating == false) {
@@ -329,34 +331,41 @@ class _WriteNoteState extends State<WriteNote> {
       afterButtonPressed: _focusNode.requestFocus,
     );
 
-    return ListView(
+    return Column(
       children: [
-        Column(
-          children: [
-            stateToolbar ? Container(child: toolbar) : Container(),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  color: colorContainer(),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      titleNote,
-                      const SizedBox(
-                        height: 10.0,
+        Expanded(
+          child: ListView(
+            children: [
+              Column(
+                children: [
+                  stateToolbar ? Container(child: toolbar) : Container(),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.0),
+                        color: colorContainer(),
                       ),
-                      quillEditor,
-                    ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            titleNote,
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            quillEditor,
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        adMob(adBannerNewNote, adWidgetNewNote),
       ],
     );
   }

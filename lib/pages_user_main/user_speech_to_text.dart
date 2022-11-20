@@ -1,3 +1,4 @@
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -193,6 +194,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
       title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -209,87 +211,88 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
         ),
         body: Container(
           color: Colors.grey.withOpacity(0.2),
-          child: Center(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          color: colorContainer(),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                maxLines: 15,
-                                cursorColor: Colors.blue,
-                                keyboardType: TextInputType.multiline,
-                                style: const TextStyle(color: Colors.black),
-                                controller: lastWords,
-                                decoration: InputDecoration(
-                                  labelText: "Texto Reconocido",
-                                  labelStyle:
-                                      const TextStyle(color: Colors.blue),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    borderSide: const BorderSide(
-                                      color: Colors.blue,
-                                      width: 1.5,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25.0),
+                                color: colorContainer(),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      maxLines: 15,
+                                      cursorColor: Colors.blue,
+                                      keyboardType: TextInputType.multiline,
+                                      style: const TextStyle(color: Colors.black),
+                                      controller: lastWords,
+                                      decoration: InputDecoration(
+                                        labelText: "Texto Reconocido",
+                                        labelStyle:
+                                            const TextStyle(color: Colors.blue),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(25.0),
+                                          borderSide: const BorderSide(
+                                            color: Colors.blue,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Colors.blue, width: 2.0),
+                                          borderRadius: BorderRadius.circular(25.0),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.blue, width: 2.0),
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5.0, left: 5.0),
+                            child: _buttonGroupOptions(),
+                          ),
+                          GestureDetector(
+                            onTap: (isListening) ? null : startListening,
+                            child: Center(
+                                child: speech.isListening
+                                    ? Lottie.asset('images/lottie/recording.zip',
+                                        animate: true, width: 300, height: 200)
+                                    : Lottie.asset('images/lottie/recording.zip',
+                                        animate: false, width: 300, height: 200)),
+                          ),
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5.0, left: 5.0),
-                      child: _buttonGroupOptions(),
-                    ),
-                    GestureDetector(
-                      onTap: (isListening) ? null : startListening,
-                      child: Center(
-                          child: speech.isListening
-                              ? Lottie.asset('images/lottie/recording.zip',
-                                  animate: true, width: 300, height: 200)
-                              : Lottie.asset('images/lottie/recording.zip',
-                                  animate: false, width: 300, height: 200)),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+              adMob(adBannerSpeechToText, adWidgetSpeechToText),
+            ],
           ),
         ),
       ),
     );
   }
 
-  // This is called each time the users wants to start a new speech
-  // recognition session
   void startListening() {
     setState(() {
       isListening = true;
     });
     lastWords.clear();
     lastError = '';
-    // Note that `listenFor` is the maximum, not the minimun, on some
-    // systems recognition will be stopped before this value is reached.
-    // Similarly `pauseFor` is a maximum not a minimum and may be ignored
-    // on some devices.
     speech.listen(
         onResult: resultListener,
         listenFor: const Duration(seconds: 30),
@@ -314,8 +317,6 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
     });
   }
 
-  /// This callback is invoked each time new recognition results are
-  /// available after `listen` is called.
   void resultListener(SpeechRecognitionResult result) {
     setState(() {
       lastWords.text = result.recognizedWords;
@@ -328,7 +329,6 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
   void soundLevelListener(double level) {
     minSoundLevel = min(minSoundLevel, level);
     maxSoundLevel = max(maxSoundLevel, level);
-    // _logEvent('sound level $level: $minSoundLevel - $maxSoundLevel ');
     setState(() {
       this.level = level;
     });
@@ -347,7 +347,6 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
   }
 }
 
-/// Displays the most recently recognized words and the sound level.
 class RecognitionResultsWidget extends StatelessWidget {
   const RecognitionResultsWidget({
     Key? key,
@@ -379,7 +378,6 @@ class RecognitionResultsWidget extends StatelessWidget {
   }
 }
 
-/// Controls to start and stop speech recognition
 class SpeechControlWidget extends StatelessWidget {
   const SpeechControlWidget(this.isListening, this.startListening, {Key? key})
       : super(key: key);

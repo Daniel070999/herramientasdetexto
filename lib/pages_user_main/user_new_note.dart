@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
 
 class NewNote extends StatefulWidget {
@@ -185,6 +186,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
       title: 'Herramientas de texto',
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           actions: [
             AnimateIcons(
               startIcon: Icons.refresh_rounded,
@@ -225,125 +227,134 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
           ),
         ),
         body: Container(
-            color: Colors.grey.withOpacity(0.2),
-            child: (_loadingNotes == false)
-                ? (notes.isEmpty)
-                    ? Center(
-                        child: RefreshIndicator(
-                          onRefresh: refreshNotes,
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+          color: Colors.grey.withOpacity(0.2),
+          child: Column(
+            children: [
+              Expanded(
+                child: (_loadingNotes == false)
+                    ? (notes.isEmpty)
+                        ? Center(
+                            child: RefreshIndicator(
+                              onRefresh: refreshNotes,
+                              child: ListView(
+                                shrinkWrap: true,
                                 children: [
-                                  const Text('No tiene notas creadas'),
-                                  Lottie.asset('images/lottie/empty.zip',
-                                      repeat: false),
-                                  const Divider(
-                                      height: 50,
-                                      color: Colors.grey,
-                                      thickness: 1,
-                                      endIndent: 20,
-                                      indent: 20),
-                                  const Text(
-                                      'Puede crear su primera nota en esta parte'),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Lottie.asset(
-                                        'images/lottie/arrowdown.zip',
-                                        height: 150,
-                                        width: 150,
+                                      const Text('No tiene notas creadas'),
+                                      Lottie.asset('images/lottie/empty.zip',
+                                          repeat: false),
+                                      const Divider(
+                                          height: 50,
+                                          color: Colors.grey,
+                                          thickness: 1,
+                                          endIndent: 20,
+                                          indent: 20),
+                                      const Text(
+                                          'Puede crear su primera nota en esta parte'),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Lottie.asset(
+                                            'images/lottie/arrowdown.zip',
+                                            height: 150,
+                                            width: 150,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : LiveList.options(
-                        options: options,
-                        itemCount: notes.length,
-                        // Like GridView.builder, but also includes animation property
-                        itemBuilder: (context, index, animation) {
-                          final note = notes[index];
-                          int id = note.id!.toInt();
-                          return FadeTransition(
-                            opacity: Tween<double>(
-                              begin: 0,
-                              end: 1,
-                            ).animate(animation),
-                            // And slide transition
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10.0, left: 10.0, right: 10.0),
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: Offset(0, -0.1),
-                                  end: Offset.zero,
+                            ),
+                          )
+                        : LiveList.options(
+                            options: options,
+                            itemCount: notes.length,
+                            // Like GridView.builder, but also includes animation property
+                            itemBuilder: (context, index, animation) {
+                              final note = notes[index];
+                              int id = note.id!.toInt();
+                              return FadeTransition(
+                                opacity: Tween<double>(
+                                  begin: 0,
+                                  end: 1,
                                 ).animate(animation),
-                                // Paste you Widget
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25.0)),
-                                  ),
-                                  child: OpenContainer(
-                                    closedShape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(25.0),
+                                // And slide transition
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10.0, left: 10.0, right: 10.0),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(0, -0.1),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    // Paste you Widget
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(25.0)),
+                                      ),
+                                      child: OpenContainer(
+                                        closedShape:
+                                            const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        transitionType:
+                                            ContainerTransitionType.fadeThrough,
+                                        closedBuilder: (BuildContext _,
+                                            VoidCallback openContainer) {
+                                          return ListTile(
+                                            onLongPress: () {
+                                              _viewDeleteNote(
+                                                  note.title, note.id!.toInt());
+                                            },
+                                            onTap: openContainer,
+                                            title: Text(
+                                              note.title,
+                                              style: const TextStyle(
+                                                  fontSize: 18.0),
+                                            ),
+                                            trailing: Text(
+                                              'Fecha: ' +
+                                                  note.createdTime
+                                                      .toIso8601String()
+                                                      .replaceAll(RegExp('T'),
+                                                          '\nHora: ')
+                                                      .replaceRange(
+                                                          25, null, ''),
+                                              style: TextStyle(fontSize: 12.0),
+                                            ),
+                                          );
+                                        },
+                                        openBuilder:
+                                            (BuildContext _, VoidCallback __) {
+                                          return WriteNote(id);
+                                        },
                                       ),
                                     ),
-                                    transitionType:
-                                        ContainerTransitionType.fadeThrough,
-                                    closedBuilder: (BuildContext _,
-                                        VoidCallback openContainer) {
-                                      return ListTile(
-                                        onLongPress: () {
-                                          _viewDeleteNote(
-                                              note.title, note.id!.toInt());
-                                        },
-                                        onTap: openContainer,
-                                        title: Text(
-                                          note.title,
-                                          style:
-                                              const TextStyle(fontSize: 18.0),
-                                        ),
-                                        trailing: Text(
-                                          'Fecha: ' +
-                                              note.createdTime
-                                                  .toIso8601String()
-                                                  .replaceAll(
-                                                      RegExp('T'), '\nHora: ')
-                                                  .replaceRange(25, null, ''),
-                                          style: TextStyle(fontSize: 12.0),
-                                        ),
-                                      );
-                                    },
-                                    openBuilder:
-                                        (BuildContext _, VoidCallback __) {
-                                      return WriteNote(id);
-                                    },
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
-
-                        // Other properties correspond to the `ListView.builder` / `ListView.separated` widget
-                      )
-                : Center(
-                    child: Lottie.asset('images/lottie/searching.zip',
-                        width: 300, height: 300, fit: BoxFit.fill),
-                  )),
+                              );
+                            },
+                          )
+                    : Center(
+                        child: Lottie.asset('images/lottie/searching.zip',
+                            width: 300, height: 300, fit: BoxFit.fill),
+                      ),
+              ),
+              adMob(adBannerListNotas, adWidgetListaNotas),
+            ],
+          ),
+        ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(
           backgroundColor: Colors.lightBlue,

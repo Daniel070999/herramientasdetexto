@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -16,6 +20,16 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    //cargar los anuncios
+    adBannerMenuPrincipal.load();
+    adBannerListNotas.load();
+    adBannerNewNote.load();
+    adBannerQR.load();
+    adBannerTraductor.load();
+    adBannerImageText.load();
+    adBannerSpeechToText.load();
+    adBannerTextToSpeech.load();
+    adBannerPDF.load();
   }
 
   @override
