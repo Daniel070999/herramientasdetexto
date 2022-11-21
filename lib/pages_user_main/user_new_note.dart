@@ -1,6 +1,9 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:fluttersupabase/admob/ad.dart';
 import 'package:fluttersupabase/constants.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NewNote extends StatefulWidget {
   const NewNote({super.key});
@@ -23,6 +26,10 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
   late List<Note> notes = [];
   late AnimateIconController controllerIcon;
+  late List<List<dynamic>> employeeData;
+  List<PlatformFile>? _paths;
+  String? _extension = "csv";
+  FileType _pickingType = FileType.custom;
 
   Future<void> _deleteNote(BuildContext context, int idUpdate) async {
     await NotesDatabase.instance.delete(idUpdate);
@@ -115,9 +122,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
 
   Future refreshNotes() async {
     setState(() => _loadingNotes = true);
-
     this.notes = await NotesDatabase.instance.readAllNotes();
-
     setState(() => _loadingNotes = false);
   }
 
@@ -125,7 +130,116 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
   void initState() {
     refreshNotes();
     controllerIcon = AnimateIconController();
+    employeeData = List<List<dynamic>>.empty(growable: true);
     super.initState();
+  }
+
+  exportNotes(BuildContext _) async {
+    late List<Note> notesRead = [];
+    notesRead = await NotesDatabase.instance.readAllNotes();
+    if (notesRead.isEmpty) {
+      Fluttertoast.showToast(
+          msg: 'No tiene notas para exportar', backgroundColor: Colors.grey);
+    } else {
+      if (await Permission.storage.request().isGranted) {
+        String dir = (await getExternalStorageDirectory())!.path +
+            "/copia_de_seguridad_Notas.csv";
+        String file = "$dir";
+        File f = File(file);
+        employeeData.clear();
+        for (var i = 0; i < notesRead.length; i++) {
+          List<dynamic> row = List.empty(growable: true);
+          row.add(notesRead[i].title);
+          row.add(notesRead[i].description);
+          row.add(notesRead[i].createdTime);
+          employeeData.add(row);
+        }
+
+        String csv = const ListToCsvConverter().convert(employeeData);
+        f.writeAsString(csv);
+        viewExportNotes(_, f);
+      } else {
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.storage,
+        ].request();
+      }
+    }
+  }
+
+  importNotes(BuildContext _) async {
+    late List<Note> notesRead = [];
+    notesRead = await NotesDatabase.instance.readAllNotes();
+    if (notesRead.isNotEmpty) {
+      Fluttertoast.showToast(
+          msg: 'Usted ya tiene notas creadas', backgroundColor: Colors.grey);
+    } else {
+      openFileExplorer();
+    }
+  }
+
+  openFileExplorer() async {
+    try {
+      _paths = (await FilePicker.platform.pickFiles(
+        type: _pickingType,
+        allowMultiple: false,
+        allowedExtensions: (_extension?.isNotEmpty ?? false)
+            ? _extension?.replaceAll(' ', '').split(',')
+            : null,
+      ))
+          ?.files;
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    } catch (ex) {
+      print(ex);
+    }
+    if (!mounted) return;
+    setState(() {
+      openFile(_paths![0].path);
+      print(_paths);
+      print("File path ${_paths![0]}");
+      print(_paths!.first.extension);
+    });
+  }
+
+  openFile(filepath) async {
+    File f = new File(filepath);
+    print("CSV to List");
+    final input = f.openRead();
+    final fields = await input
+        .transform(utf8.decoder)
+        .transform(new CsvToListConverter())
+        .toList();
+    print(fields);
+    setState(() {
+      employeeData.clear();
+      employeeData = fields;
+      reloadNotesImport();
+    });
+  }
+
+  reloadNotesImport() async {
+    try {
+      for (var i = 0; i < employeeData.length; i++) {
+        // QuillController? controllerDescription;
+        //controllerDescription = employeeData[i][1];
+        //final description = jsonEncode(controllerDescription?.document.toDelta().toJson());
+        final note = Note(
+          title: employeeData[i][0],
+          description: employeeData[i][1],
+          createdTime: DateTime.parse(employeeData[i][2]),
+        );
+        await NotesDatabase.instance.create(note);
+      }
+      setState(() {
+        refreshNotes();
+      });
+      Fluttertoast.showToast(
+          msg: 'Notas importadas', backgroundColor: Colors.grey);
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: 'Algo salió mal', backgroundColor: Colors.grey);
+    }
   }
 
   @override
@@ -431,7 +545,10 @@ Widget showAnimateExportNotes(BuildContext context, File file) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Las notas fueron exportadas en:'),
+                const Text(
+                  'Por favor, evite modificar el documento generado.\nLas imágenes y videos no se podrán ver ya que son almacenadas internamente en el dispositivo en el cual fue creada la nota.\nLas notas fueron exportadas en:',
+                  textAlign: TextAlign.justify,
+                ),
                 const Divider(
                   height: 10,
                   color: Colors.black,
@@ -464,22 +581,4 @@ Widget showAnimateExportNotes(BuildContext context, File file) {
       ),
     ],
   );
-}
-
-exportNotes(BuildContext _) async {
-  late List<Note> notesRead = [];
-  notesRead = await NotesDatabase.instance.readAllNotes();
-  if (notesRead.isEmpty) {
-    Fluttertoast.showToast(
-        msg: 'No tiene notas para exportar', backgroundColor: Colors.grey);
-  } else {}
-}
-
-importNotes(BuildContext _) async {
-  late List<Note> notesRead = [];
-  notesRead = await NotesDatabase.instance.readAllNotes();
-  if (notesRead.isNotEmpty) {
-    Fluttertoast.showToast(
-        msg: 'Usted ya tiene notas creadas', backgroundColor: Colors.grey);
-  } else {}
 }

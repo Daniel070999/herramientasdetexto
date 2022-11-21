@@ -253,6 +253,7 @@ class _WriteNoteState extends State<WriteNote> {
       description: description,
       createdTime: DateTime.now(),
     );
+    print(description);
     await NotesDatabase.instance.create(note);
   }
 
