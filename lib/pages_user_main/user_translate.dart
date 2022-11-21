@@ -50,79 +50,87 @@ class _TranslateState extends State<Translate> {
   String languajeSelected = 'español';
   PDFDoc? _pdfDoc;
   Widget _listItemsLanguaje(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: colorContainer(),
+    return PhysicalModel(
+      elevation: 10.0,
+      shadowColor: Colors.black,
+      color: Colors.white,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(40.0),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            icon: const Icon(
-              Icons.keyboard_double_arrow_down_rounded,
-              color: Colors.lightBlue,
-            ),
-            barrierColor: Colors.grey.withOpacity(0.7),
-            buttonPadding: const EdgeInsets.all(10.0),
-            hint: const Text(
-              'Seleccione un idioma',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: colorContainer(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              icon: const Icon(
+                Icons.keyboard_double_arrow_down_rounded,
+                color: Colors.lightBlue,
               ),
-            ),
-            items: items
-                .map((item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+              barrierColor: Colors.grey.withOpacity(0.7),
+              buttonPadding: const EdgeInsets.all(10.0),
+              hint: const Text(
+                'Seleccione un idioma',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              items: items
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                    ))
-                .toList(),
-            value: selectedValue,
-            onChanged: (value) {
-              setState(() {
-                selectedValue = value as String;
-                languajeSelected = value;
-                _textOutput.text = 'Traduciendo...';
-                _translate(_textInput.text);
-              });
-            },
-            buttonHeight: 40,
-            itemHeight: 40,
-            dropdownMaxHeight: 250,
-            searchController: textEditingController,
-            searchInnerWidget: Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextFormField(
-                controller: textEditingController,
-                decoration: InputDecoration(
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  hintText: 'Buscar un idioma',
-                  hintStyle: const TextStyle(fontSize: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
+                      ))
+                  .toList(),
+              value: selectedValue,
+              onChanged: (value) {
+                setState(() {
+                  selectedValue = value as String;
+                  languajeSelected = value;
+                  _textOutput.text = 'Traduciendo...';
+                  _translate(_textInput.text);
+                });
+              },
+              buttonHeight: 40,
+              itemHeight: 40,
+              dropdownMaxHeight: 250,
+              searchController: textEditingController,
+              searchInnerWidget: Padding(
+                padding: const EdgeInsets.all(8),
+                child: TextFormField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    hintText: 'Buscar un idioma',
+                    hintStyle: const TextStyle(fontSize: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
                 ),
               ),
+              searchMatchFn: (item, searchValue) {
+                return (item.value.toString().contains(searchValue));
+              },
+              onMenuStateChange: (isOpen) {
+                if (!isOpen) {
+                  textEditingController.clear();
+                }
+              },
             ),
-            searchMatchFn: (item, searchValue) {
-              return (item.value.toString().contains(searchValue));
-            },
-            onMenuStateChange: (isOpen) {
-              if (!isOpen) {
-                textEditingController.clear();
-              }
-            },
           ),
         ),
       ),
@@ -255,46 +263,58 @@ class _TranslateState extends State<Translate> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.0),
-                                color: colorContainer(),
+                            child: PhysicalModel(
+                              elevation: 10.0,
+                              shadowColor: Colors.black,
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(40.0),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _textOutput.text = 'Traduciendo...';
-                                        });
-                                        _translate(value);
-                                      },
-                                      maxLines: 10,
-                                      cursorColor: Colors.blue,
-                                      keyboardType: TextInputType.multiline,
-                                      style: const TextStyle(color: Colors.black),
-                                      controller: _textInput,
-                                      decoration: InputDecoration(
-                                        labelText: "Ingrese el texto a traducir",
-                                        labelStyle:
-                                            const TextStyle(color: Colors.blue),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(25.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.blue,
-                                            width: 1.5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  color: colorContainer(),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _textOutput.text = 'Traduciendo...';
+                                          });
+                                          _translate(value);
+                                        },
+                                        maxLines: 10,
+                                        cursorColor: Colors.blue,
+                                        keyboardType: TextInputType.multiline,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        controller: _textInput,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              "Ingrese el texto a traducir",
+                                          labelStyle: const TextStyle(
+                                              color: Colors.blue),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.blue,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
                                           ),
                                         ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.blue, width: 2.0),
-                                          borderRadius: BorderRadius.circular(25.0),
-                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -302,208 +322,240 @@ class _TranslateState extends State<Translate> {
                           _listItemsLanguaje(context),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.0),
-                                color: colorContainer(),
+                            child: PhysicalModel(
+                              elevation: 10.0,
+                              shadowColor: Colors.black,
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(40.0),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _textOutput.text = 'Traduciendo...';
-                                        });
-                                        _translate(value);
-                                      },
-                                      maxLines: 10,
-                                      cursorColor: Colors.blue,
-                                      keyboardType: TextInputType.multiline,
-                                      style: const TextStyle(color: Colors.black),
-                                      readOnly: true,
-                                      controller: _textOutput,
-                                      decoration: InputDecoration(
-                                        labelText: "Texto traducido",
-                                        labelStyle:
-                                            const TextStyle(color: Colors.blue),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(25.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.blue,
-                                            width: 1.5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  color: colorContainer(),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _textOutput.text = 'Traduciendo...';
+                                          });
+                                          _translate(value);
+                                        },
+                                        maxLines: 10,
+                                        cursorColor: Colors.blue,
+                                        keyboardType: TextInputType.multiline,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        readOnly: true,
+                                        controller: _textOutput,
+                                        decoration: InputDecoration(
+                                          labelText: "Texto traducido",
+                                          labelStyle: const TextStyle(
+                                              color: Colors.blue),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.blue,
+                                              width: 1.5,
+                                            ),
                                           ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.blue, width: 2.0),
-                                          borderRadius: BorderRadius.circular(25.0),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(150)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          150)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
                                             ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
-                                          ),
-                                          onPressed: () {
-                                            if (_textOutput.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay texto para escuchar',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              textToSpeech(context, _textOutput.text);
-                                            }
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Escuchar',
-                                              style:
-                                                  TextStyle(color: Colors.lightBlue),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(150)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
-                                            ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
-                                          ),
-                                          onPressed: () {
-                                            if (_textOutput.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay texto para compartir',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              Share.share(_textOutput.text);
-                                            }
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Compartir',
-                                              style:
-                                                  TextStyle(color: Colors.lightBlue),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(100)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
-                                            ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
-                                          ),
-                                          onPressed: () {
-                                            if (_textOutput.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay texto para copiar',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: _textOutput.text));
-                                              Fluttertoast.showToast(
-                                                msg: 'Se copió al portapepeles',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            }
-                                          },
-                                          child: const Center(
+                                            onPressed: () {
+                                              if (_textOutput.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay texto para escuchar',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                textToSpeech(
+                                                    context, _textOutput.text);
+                                              }
+                                            },
+                                            child: const Center(
                                               child: Text(
-                                            'Copiar',
-                                            style: TextStyle(color: Colors.lightBlue),
-                                          )),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(100)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
+                                                'Escuchar',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
                                             ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _textInput.clear();
-                                              _textOutput.clear();
-                                            });
-                                          },
-                                          child: const Center(
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          150)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              if (_textOutput.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay texto para compartir',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                Share.share(_textOutput.text);
+                                              }
+                                            },
+                                            child: const Center(
                                               child: Text(
-                                            'Limpiar',
-                                            style: TextStyle(color: Colors.lightBlue),
-                                          )),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                                'Compartir',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          100)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              if (_textOutput.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay texto para copiar',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                Clipboard.setData(ClipboardData(
+                                                    text: _textOutput.text));
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'Se copió al portapepeles',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              }
+                                            },
+                                            child: const Center(
+                                                child: Text(
+                                              'Copiar',
+                                              style: TextStyle(
+                                                  color: Colors.lightBlue),
+                                            )),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          100)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _textInput.clear();
+                                                _textOutput.clear();
+                                              });
+                                            },
+                                            child: const Center(
+                                                child: Text(
+                                              'Limpiar',
+                                              style: TextStyle(
+                                                  color: Colors.lightBlue),
+                                            )),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

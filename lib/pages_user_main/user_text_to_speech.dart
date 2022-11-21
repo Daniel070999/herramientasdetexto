@@ -324,37 +324,49 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
                         child: Center(
                           child: Column(
                             children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                    color: colorContainer()),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: TextFormField(
-                                    onChanged: (String newText) {
-                                      setState(() {
-                                        text = newText;
-                                      });
-                                    },
-                                    maxLines: 15,
-                                    cursorColor: Colors.blue,
-                                    keyboardType: TextInputType.multiline,
-                                    style: const TextStyle(color: Colors.black),
-                                    controller: textEditingControllerTS,
-                                    decoration: InputDecoration(
-                                      labelText: "Ingrese un texto",
-                                      labelStyle: const TextStyle(color: Colors.blue),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(25.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.blue,
-                                          width: 1.5,
+                              PhysicalModel(
+                                elevation: 10.0,
+                                shadowColor: Colors.black,
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(40.0),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      color: colorContainer()),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: TextFormField(
+                                      onChanged: (String newText) {
+                                        setState(() {
+                                          text = newText;
+                                        });
+                                      },
+                                      maxLines: 15,
+                                      cursorColor: Colors.blue,
+                                      keyboardType: TextInputType.multiline,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      controller: textEditingControllerTS,
+                                      decoration: InputDecoration(
+                                        labelText: "Ingrese un texto",
+                                        labelStyle:
+                                            const TextStyle(color: Colors.blue),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                          borderSide: const BorderSide(
+                                            color: Colors.blue,
+                                            width: 1.5,
+                                          ),
                                         ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.blue, width: 2.0),
-                                        borderRadius: BorderRadius.circular(25.0),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Colors.blue, width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                        ),
                                       ),
                                     ),
                                   ),

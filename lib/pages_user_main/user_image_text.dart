@@ -200,216 +200,245 @@ class _TextImageState extends State<TextImage> {
                             ),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  color: colorContainer()),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      controller: scannedText,
-                                      maxLines: 10,
-                                      cursorColor: Colors.blue,
-                                      keyboardType: TextInputType.multiline,
-                                      style: const TextStyle(color: Colors.black),
-                                      decoration: InputDecoration(
-                                        labelText: "Texto reconocido",
-                                        labelStyle:
-                                            const TextStyle(color: Colors.blue),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(25.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.blue,
-                                            width: 1.5,
+                            child: PhysicalModel(
+                              elevation: 10.0,
+                              shadowColor: Colors.black,
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(40.0),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    color: colorContainer()),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        controller: scannedText,
+                                        maxLines: 10,
+                                        cursorColor: Colors.blue,
+                                        keyboardType: TextInputType.multiline,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          labelText: "Texto reconocido",
+                                          labelStyle: const TextStyle(
+                                              color: Colors.blue),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.blue,
+                                              width: 1.5,
+                                            ),
                                           ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.blue, width: 2.0),
-                                          borderRadius: BorderRadius.circular(25.0),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(150)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          150)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
                                             ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
-                                          ),
-                                          onPressed: () {
-                                            if (scannedText.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay texto para escuchar',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              textToSpeech(
-                                                  context, scannedText.text);
-                                            }
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Escuchar',
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(150)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
-                                            ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
-                                          ),
-                                          onPressed: () {
-                                            if (scannedText.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay texto para traducir',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              translate(context, scannedText.text);
-                                            }
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Traducir',
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
+                                            onPressed: () {
+                                              if (scannedText.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay texto para escuchar',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                textToSpeech(
+                                                    context, scannedText.text);
+                                              }
+                                            },
+                                            child: const Center(
+                                              child: Text(
+                                                'Escuchar',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(100)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
-                                            ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
+                                          const SizedBox(
+                                            width: 10,
                                           ),
-                                          onPressed: () {
-                                            if (scannedText.text.isEmpty) {
-                                              Fluttertoast.showToast(
-                                                msg: 'No hay nada para copiar',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            } else {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: scannedText.text));
-              
-                                              Fluttertoast.showToast(
-                                                msg: 'Se copió al portapapeles',
-                                                backgroundColor: Colors.grey,
-                                              );
-                                            }
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Copiar',
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          150)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              if (scannedText.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay texto para traducir',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                translate(
+                                                    context, scannedText.text);
+                                              }
+                                            },
+                                            child: const Center(
+                                              child: Text(
+                                                'Traducir',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        OutlinedButton(
-                                          style: ButtonStyle(
-                                            fixedSize: MaterialStateProperty.all(
-                                                const Size.fromWidth(100)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.transparent),
-                                            foregroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.lightBlue),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25)),
-                                            ),
-                                            side: MaterialStateProperty.all(
-                                                const BorderSide(
-                                                    color: Colors.lightBlue)),
+                                          const SizedBox(
+                                            width: 10,
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              scannedText.clear();
-                                              imageFile = null;
-                                            });
-                                          },
-                                          child: const Center(
-                                            child: Text(
-                                              'Limpiar',
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          100)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              if (scannedText.text.isEmpty) {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'No hay nada para copiar',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              } else {
+                                                Clipboard.setData(ClipboardData(
+                                                    text: scannedText.text));
+
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      'Se copió al portapapeles',
+                                                  backgroundColor: Colors.grey,
+                                                );
+                                              }
+                                            },
+                                            child: const Center(
+                                              child: Text(
+                                                'Copiar',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          OutlinedButton(
+                                            style: ButtonStyle(
+                                              fixedSize:
+                                                  MaterialStateProperty.all(
+                                                      const Size.fromWidth(
+                                                          100)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              foregroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.lightBlue),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              side: MaterialStateProperty.all(
+                                                  const BorderSide(
+                                                      color: Colors.lightBlue)),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                scannedText.clear();
+                                                imageFile = null;
+                                              });
+                                            },
+                                            child: const Center(
+                                              child: Text(
+                                                'Limpiar',
+                                                style: TextStyle(
+                                                    color: Colors.lightBlue),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      
                     ],
                   ),
                 ),

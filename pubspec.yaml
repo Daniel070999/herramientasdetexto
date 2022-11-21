@@ -92,6 +92,8 @@ dependencies:
   animations: ^2.0.7
   #googel ad mob
   google_mobile_ads: ^2.3.0
+  #direccion de path
+  path_provider: ^2.0.11
 
 flutter_icons:
   android: "launcher_icon"

@@ -222,56 +222,74 @@ class _SpeechToTextPageState extends State<SpeechToTextPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.0),
-                                color: colorContainer(),
+                            child: PhysicalModel(
+                              elevation: 10.0,
+                              shadowColor: Colors.black,
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(40.0),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    TextFormField(
-                                      maxLines: 15,
-                                      cursorColor: Colors.blue,
-                                      keyboardType: TextInputType.multiline,
-                                      style: const TextStyle(color: Colors.black),
-                                      controller: lastWords,
-                                      decoration: InputDecoration(
-                                        labelText: "Texto Reconocido",
-                                        labelStyle:
-                                            const TextStyle(color: Colors.blue),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(25.0),
-                                          borderSide: const BorderSide(
-                                            color: Colors.blue,
-                                            width: 1.5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  color: colorContainer(),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        maxLines: 15,
+                                        cursorColor: Colors.blue,
+                                        keyboardType: TextInputType.multiline,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        controller: lastWords,
+                                        decoration: InputDecoration(
+                                          labelText: "Texto Reconocido",
+                                          labelStyle: const TextStyle(
+                                              color: Colors.blue),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.blue,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
                                           ),
                                         ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Colors.blue, width: 2.0),
-                                          borderRadius: BorderRadius.circular(25.0),
-                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 5.0, left: 5.0),
+                            padding:
+                                const EdgeInsets.only(right: 5.0, left: 5.0),
                             child: _buttonGroupOptions(),
                           ),
                           GestureDetector(
                             onTap: (isListening) ? null : startListening,
                             child: Center(
                                 child: speech.isListening
-                                    ? Lottie.asset('images/lottie/recording.zip',
-                                        animate: true, width: 300, height: 200)
-                                    : Lottie.asset('images/lottie/recording.zip',
-                                        animate: false, width: 300, height: 200)),
+                                    ? Lottie.asset(
+                                        'images/lottie/recording.zip',
+                                        animate: true,
+                                        width: 300,
+                                        height: 200)
+                                    : Lottie.asset(
+                                        'images/lottie/recording.zip',
+                                        animate: false,
+                                        width: 300,
+                                        height: 200)),
                           ),
                         ],
                       ),

@@ -36,56 +36,6 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> _confirmNoUpdate(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          icon: const Icon(
-            Icons.warning,
-            size: 50.0,
-          ),
-          iconColor: Colors.red,
-          actionsAlignment: MainAxisAlignment.center,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(32.0))),
-          title: const Text(
-              '¿Esta seguro que desea salir sin guardar los cambios?'),
-          actions: <Widget>[
-            ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.lightGreen),
-              ),
-              child: const Text(
-                'Cancelar',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.red),
-              ),
-              child: const Text(
-                'Salir sin guardar',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                _titleUpdate = false;
-                _descriptionUpdate = false;
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _viewDeleteNote(String titleUpdate, int idUpdate) {
     showGeneralDialog(
       context: context,
@@ -211,6 +161,27 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
               endIconColor: Colors.white,
               clockwise: false,
             ),
+            PopupMenuButton(
+                // add icon, by default "3 dot" icon
+                // icon: Icon(Icons.book)
+                itemBuilder: (context) {
+              return const [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text("Exportar Notas"),
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Text("Importar Notas"),
+                ),
+              ];
+            }, onSelected: (value) async {
+              if (value == 0) {
+                exportNotes(context);
+              } else if (value == 1) {
+                importNotes(context);
+              }
+            }),
           ],
           leading: IconButton(
             onPressed: () {
@@ -276,7 +247,6 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
                         : LiveList.options(
                             options: options,
                             itemCount: notes.length,
-                            // Like GridView.builder, but also includes animation property
                             itemBuilder: (context, index, animation) {
                               final note = notes[index];
                               int id = note.id!.toInt();
@@ -291,54 +261,64 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
                                       top: 10.0, left: 10.0, right: 10.0),
                                   child: SlideTransition(
                                     position: Tween<Offset>(
-                                      begin: Offset(0, -0.1),
+                                      begin: const Offset(0, -0.1),
                                       end: Offset.zero,
                                     ).animate(animation),
                                     // Paste you Widget
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25.0)),
+                                    child: PhysicalModel(
+                                      elevation: 5.0,
+                                      shadowColor: Colors.black,
+                                      color: Colors.white,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(40.0),
                                       ),
-                                      child: OpenContainer(
-                                        closedShape:
-                                            const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(25.0),
-                                          ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: colorContainer(),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(25.0)),
                                         ),
-                                        transitionType:
-                                            ContainerTransitionType.fadeThrough,
-                                        closedBuilder: (BuildContext _,
-                                            VoidCallback openContainer) {
-                                          return ListTile(
-                                            onLongPress: () {
-                                              _viewDeleteNote(
-                                                  note.title, note.id!.toInt());
-                                            },
-                                            onTap: openContainer,
-                                            title: Text(
-                                              note.title,
-                                              style: const TextStyle(
-                                                  fontSize: 18.0),
+                                        child: OpenContainer(
+                                          closedShape:
+                                              const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(25.0),
                                             ),
-                                            trailing: Text(
-                                              'Fecha: ' +
-                                                  note.createdTime
-                                                      .toIso8601String()
-                                                      .replaceAll(RegExp('T'),
-                                                          '\nHora: ')
-                                                      .replaceRange(
-                                                          25, null, ''),
-                                              style: TextStyle(fontSize: 12.0),
-                                            ),
-                                          );
-                                        },
-                                        openBuilder:
-                                            (BuildContext _, VoidCallback __) {
-                                          return WriteNote(id);
-                                        },
+                                          ),
+                                          transitionType:
+                                              ContainerTransitionType
+                                                  .fadeThrough,
+                                          closedBuilder: (BuildContext _,
+                                              VoidCallback openContainer) {
+                                            return ListTile(
+                                              onLongPress: () {
+                                                _viewDeleteNote(note.title,
+                                                    note.id!.toInt());
+                                              },
+                                              onTap: openContainer,
+                                              title: Text(
+                                                note.title,
+                                                style: const TextStyle(
+                                                    fontSize: 18.0),
+                                              ),
+                                              trailing: Text(
+                                                'Fecha: ' +
+                                                    note.createdTime
+                                                        .toIso8601String()
+                                                        .replaceAll(RegExp('T'),
+                                                            '\nHora: ')
+                                                        .replaceRange(
+                                                            25, null, ''),
+                                                style:
+                                                    TextStyle(fontSize: 12.0),
+                                              ),
+                                            );
+                                          },
+                                          openBuilder: (BuildContext _,
+                                              VoidCallback __) {
+                                            return WriteNote(id);
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -357,6 +337,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(
+          afterClose: refreshNotes,
           backgroundColor: Colors.lightBlue,
           overlayStyle: ExpandableFabOverlayStyle(
             blur: 0,
@@ -406,4 +387,99 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+viewExportNotes(BuildContext _, File file) {
+  showGeneralDialog(
+    context: _,
+    pageBuilder: (ctx, a1, a2) {
+      return Container();
+    },
+    transitionBuilder: (ctx, a1, a2, child) {
+      var curve = Curves.fastOutSlowIn.transform(a1.value);
+      return Transform.scale(
+        scale: curve,
+        child: showAnimateExportNotes(ctx, file),
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 400),
+  );
+}
+
+Widget showAnimateExportNotes(BuildContext context, File file) {
+  return AlertDialog(
+    icon: const Icon(
+      Icons.check_circle_outline,
+      size: 80.0,
+    ),
+    iconColor: Colors.lightGreen,
+    actionsAlignment: MainAxisAlignment.center,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(32.0))),
+    content: SingleChildScrollView(
+      child: ListBody(
+        children: <Widget>[
+          const Center(
+            child: Text(
+              'Notas exportadas',
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Las notas fueron exportadas en:'),
+                const Divider(
+                  height: 10,
+                  color: Colors.black,
+                ),
+                Text(
+                  file.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+    actions: <Widget>[
+      const SizedBox(
+        height: 20.0,
+      ),
+      ElevatedButton(
+        style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.lightGreen),
+        ),
+        child: const Text(
+          'Aceptar',
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
+  );
+}
+
+exportNotes(BuildContext _) async {
+  late List<Note> notesRead = [];
+  notesRead = await NotesDatabase.instance.readAllNotes();
+  if (notesRead.isEmpty) {
+    Fluttertoast.showToast(
+        msg: 'No tiene notas para exportar', backgroundColor: Colors.grey);
+  } else {}
+}
+
+importNotes(BuildContext _) async {
+  late List<Note> notesRead = [];
+  notesRead = await NotesDatabase.instance.readAllNotes();
+  if (notesRead.isNotEmpty) {
+    Fluttertoast.showToast(
+        msg: 'Usted ya tiene notas creadas', backgroundColor: Colors.grey);
+  } else {}
 }

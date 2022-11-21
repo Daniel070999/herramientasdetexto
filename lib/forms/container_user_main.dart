@@ -60,68 +60,65 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
   ];
 
   Widget menu(String image, String title, int index) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: OpenContainer(
-        closedColor: colorContainer(),
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(25.0),
-          ),
+    return OpenContainer(
+      closedColor: colorContainer(),
+      closedShape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(25.0),
         ),
-        closedBuilder: (context, action) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Lottie.asset(
-                  image,
-                  animate: animationState,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          );
-        },
-        openBuilder: (index == 0)
-            ? (context, action) {
-                return const NewNote();
-              }
-            : (index == 1)
-                ? (context, action) {
-                    return const ReadQRANDROID();
-                  }
-                : (index == 2)
-                    ? (context, action) {
-                        return Translate(null);
-                      }
-                    : (index == 3)
-                        ? (context, action) {
-                            return const TextImage();
-                          }
-                        : (index == 4)
-                            ? (context, action) {
-                                return SpeechToTextPage();
-                              }
-                            : (index == 5)
-                                ? (context, action) {
-                                    return TextToSpeechPage(null);
-                                  }
-                                : (index == 6)
-                                    ? (context, action) {
-                                        return const ReadPDF();
-                                      }
-                                    : (context, action) {
-                                        return Container();
-                                      },
       ),
+      closedBuilder: (context, action) {
+        return Column(
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: Lottie.asset(
+                image,
+                animate: animationState,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        );
+      },
+      openBuilder: (index == 0)
+          ? (context, action) {
+              return const NewNote();
+            }
+          : (index == 1)
+              ? (context, action) {
+                  return const ReadQRANDROID();
+                }
+              : (index == 2)
+                  ? (context, action) {
+                      return Translate(null);
+                    }
+                  : (index == 3)
+                      ? (context, action) {
+                          return const TextImage();
+                        }
+                      : (index == 4)
+                          ? (context, action) {
+                              return SpeechToTextPage();
+                            }
+                          : (index == 5)
+                              ? (context, action) {
+                                  return TextToSpeechPage(null);
+                                }
+                              : (index == 6)
+                                  ? (context, action) {
+                                      return const ReadPDF();
+                                    }
+                                  : (context, action) {
+                                      return Container();
+                                    },
     );
   }
 
@@ -222,15 +219,15 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
           decoration: BoxDecoration(
             gradient: barColor(),
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0)),
-            ),
+          child: PhysicalModel(
+            elevation: 8.0,
+            shadowColor: Colors.black,
+            color: Colors.white.withOpacity(0.4),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(40.0),
+                topRight: Radius.circular(40.0)),
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
               child: Column(
                 children: [
                   Expanded(
@@ -247,7 +244,17 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                               begin: const Offset(0, -0.1),
                               end: Offset.zero,
                             ).animate(animation),
-                            child: menu(images[index], titles[index], index),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: PhysicalModel(
+                                  elevation: 8.0,
+                                  shadowColor: Colors.black,
+                                  color: Colors.white.withOpacity(0.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(25.0)),
+                                  child: menu(
+                                      images[index], titles[index], index)),
+                            ),
                           ),
                         );
                       },

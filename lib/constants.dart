@@ -56,6 +56,8 @@ export 'package:fluttersupabase/pages_user_main/user_translate.dart';
 export 'package:lottie/lottie.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 //constans
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:auto_animated/auto_animated.dart';
 import 'package:fluttersupabase/acerca.dart';
@@ -70,6 +72,7 @@ import 'package:fluttersupabase/pages_user_main/user_write_note.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
+import 'package:path_provider/path_provider.dart';
 
 late bool theme = false;
 writeNote(BuildContext context, int? id) async {
@@ -157,6 +160,10 @@ Color menuBackgroundColor() {
 
 Color colorContainer() {
   return theme ? Colors.grey.shade300 : Colors.white;
+}
+
+Color colorBg() {
+  return theme ? Colors.grey : Colors.white;
 }
 
 Gradient barColorScreen() {
