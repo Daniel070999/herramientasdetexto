@@ -9,10 +9,23 @@ class ReadPDF extends StatefulWidget {
   State<ReadPDF> createState() => _ReadPDFState();
 }
 
-class _ReadPDFState extends State<ReadPDF> {
+class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
   final _textInput = TextEditingController();
-  PDFDoc? _pdfDoc;
-
+  PDFDoc? _pdfDoc;late AnimationController controller;
+  late Animation colorAnimation;
+  late Animation sizeAnimation;
+  @override
+  void initState() {
+    
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    sizeAnimation = Tween<double>(begin: 25.0, end: 150.0).animate(controller);
+    controller.addListener(() {
+      setState(() {});
+    });
+    controller.forward();
+  }
   Future _pickPDFText(BuildContext context) async {
     try {
       var filePickerResult = await FilePicker.platform
@@ -46,7 +59,8 @@ class _ReadPDFState extends State<ReadPDF> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {

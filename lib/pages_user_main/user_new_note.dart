@@ -454,7 +454,7 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
           afterClose: refreshNotes,
           backgroundColor: Colors.lightBlue,
           overlayStyle: ExpandableFabOverlayStyle(
-            blur: 0,
+            blur: 5,
           ),
           children: [
             OpenContainer(

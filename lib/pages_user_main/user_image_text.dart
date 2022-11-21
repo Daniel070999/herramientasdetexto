@@ -9,9 +9,11 @@ class TextImage extends StatefulWidget {
   State<TextImage> createState() => _TextImageState();
 }
 
-class _TextImageState extends State<TextImage> {
+class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
   bool textScanning = false;
-
+  late AnimationController controller;
+  late Animation colorAnimation;
+  late Animation sizeAnimation;
   XFile? imageFile;
 
   final scannedText = TextEditingController();
@@ -56,7 +58,8 @@ class _TextImageState extends State<TextImage> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
@@ -88,7 +91,8 @@ class _TextImageState extends State<TextImage> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
@@ -123,6 +127,13 @@ class _TextImageState extends State<TextImage> {
 
   @override
   void initState() {
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    sizeAnimation = Tween<double>(begin: 25.0, end: 150.0).animate(controller);
+    controller.addListener(() {
+      setState(() {});
+    });
+    controller.forward();
     super.initState();
   }
 

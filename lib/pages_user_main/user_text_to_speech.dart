@@ -9,7 +9,8 @@ class TextToSpeechPage extends StatefulWidget {
   _TextToSpeechPageState createState() => _TextToSpeechPageState();
 }
 
-class _TextToSpeechPageState extends State<TextToSpeechPage> {
+class _TextToSpeechPageState extends State<TextToSpeechPage>
+    with TickerProviderStateMixin {
   final String defaultLanguage = 'en-US';
 
   TextToSpeech tts = TextToSpeech();
@@ -28,8 +29,19 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
   final textEditingControllerTS = TextEditingController();
   final listDownController = TextEditingController();
 
+  late AnimationController controller;
+  late Animation colorAnimation;
+  late Animation sizeAnimation;
+
   @override
   void initState() {
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    sizeAnimation = Tween<double>(begin: 25.0, end: 150.0).animate(controller);
+    controller.addListener(() {
+      setState(() {});
+    });
+    controller.forward();
     super.initState();
     textEditingControllerTS.text = text;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -94,7 +106,8 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
@@ -136,7 +149,8 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
@@ -174,7 +188,8 @@ class _TextToSpeechPageState extends State<TextToSpeechPage> {
         Expanded(
           flex: 1,
           child: SizedBox(
-            height: 150,
+            height: sizeAnimation.value,
+            width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
               onTap: () {
