@@ -127,6 +127,7 @@ class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
               Expanded(
                 child: Center(
                   child: ListView(
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     children: [
                       Column(

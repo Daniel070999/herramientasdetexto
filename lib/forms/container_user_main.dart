@@ -227,11 +227,13 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                 topLeft: Radius.circular(40.0),
                 topRight: Radius.circular(40.0)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+              padding:
+                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
               child: Column(
                 children: [
                   Expanded(
                     child: LiveGrid.options(
+                      physics: const BouncingScrollPhysics(),
                       options: options,
                       itemBuilder: (context, index, animation) {
                         return FadeTransition(
@@ -247,13 +249,14 @@ class _ContainerUserMainState extends State<ContainerUserMain> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: PhysicalModel(
-                                  elevation: 8.0,
-                                  shadowColor: Colors.black,
-                                  color: Colors.white.withOpacity(0.5),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(25.0)),
-                                  child: menu(
-                                      images[index], titles[index], index)),
+                                elevation: 8.0,
+                                shadowColor: Colors.black,
+                                color: Colors.white.withOpacity(0.5),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(25.0)),
+                                child:
+                                    menu(images[index], titles[index], index),
+                              ),
                             ),
                           ),
                         );

@@ -12,8 +12,11 @@ class TextImage extends StatefulWidget {
 class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
   bool textScanning = false;
   late AnimationController controller;
-  late Animation colorAnimation;
+  late AnimationController controllerTapCamera;
+  late AnimationController controllerTapGallery;
   late Animation sizeAnimation;
+  late Animation sizeAnimationTapCamera;
+  late Animation sizeAnimationTapGallery;
   XFile? imageFile;
 
   final scannedText = TextEditingController();
@@ -62,6 +65,15 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapCamera.forward();
+              },
+              onTapUp: (details) {
+                controllerTapCamera.reverse();
+              },
+              onTapCancel: () {
+                controllerTapCamera.reverse();
+              },
               onTap: () {
                 getImage(ImageSource.camera);
               },
@@ -73,7 +85,11 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child: Image.asset('images/camera.png'),
+                      child: Image.asset(
+                        'images/camera.png',
+                        width: sizeAnimationTapCamera.value,
+                        height: sizeAnimationTapCamera.value,
+                      ),
                     ),
                     const Expanded(
                       flex: 1,
@@ -95,6 +111,15 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapGallery.forward();
+              },
+              onTapUp: (details) {
+                controllerTapGallery.reverse();
+              },
+              onTapCancel: () {
+                controllerTapGallery.reverse();
+              },
               onTap: () {
                 getImage(ImageSource.gallery);
               },
@@ -106,7 +131,11 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child: Image.asset('images/galleryPicture.png'),
+                      child: Image.asset(
+                        'images/galleryPicture.png',
+                        width: sizeAnimationTapGallery.value,
+                        height: sizeAnimationTapGallery.value,
+                      ),
                     ),
                     const Expanded(
                       flex: 1,
@@ -127,13 +156,32 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
+    //animacion de incio
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
     sizeAnimation = Tween<double>(begin: 25.0, end: 150.0).animate(controller);
-    controller.addListener(() {
-      setState(() {});
-    });
+    controller.addListener(() => setState(() {}));
     controller.forward();
+    //animacion de camara
+
+    controllerTapCamera = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    sizeAnimationTapCamera =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapCamera);
+    controllerTapCamera.addListener(() => setState(() {}));
+    //animacion de galeria
+    controllerTapGallery = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapGallery.addListener(() => setState(() {}));
+    sizeAnimationTapGallery =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapGallery);
+
     super.initState();
   }
 
@@ -167,6 +215,7 @@ class _TextImageState extends State<TextImage> with TickerProviderStateMixin {
               Expanded(
                 child: Center(
                   child: ListView(
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     children: [
                       Column(

@@ -64,6 +64,7 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                 child: Builder(
                   builder: (BuildContext context) {
                     return ListView(
+                      physics: const BouncingScrollPhysics(),
                       children: <Widget>[
                         Column(
                           children: <Widget>[
@@ -271,7 +272,7 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                               ),
                             ),
                             const SizedBox(
-                              height: 20.0,
+                              height: 5.0,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),

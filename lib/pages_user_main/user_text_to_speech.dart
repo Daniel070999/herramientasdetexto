@@ -332,6 +332,7 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
               Expanded(
                 child: Center(
                   child: ListView(
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     children: [
                       Padding(

@@ -276,26 +276,26 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
               clockwise: false,
             ),
             PopupMenuButton(
-                // add icon, by default "3 dot" icon
-                // icon: Icon(Icons.book)
+                tooltip: 'Copia de seguridad',
                 itemBuilder: (context) {
-              return const [
-                PopupMenuItem<int>(
-                  value: 0,
-                  child: Text("Exportar Notas"),
-                ),
-                PopupMenuItem<int>(
-                  value: 1,
-                  child: Text("Importar Notas"),
-                ),
-              ];
-            }, onSelected: (value) async {
-              if (value == 0) {
-                exportNotes(context);
-              } else if (value == 1) {
-                importNotes(context);
-              }
-            }),
+                  return const [
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: Text("Exportar Notas"),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: Text("Importar Notas"),
+                    ),
+                  ];
+                },
+                onSelected: (value) async {
+                  if (value == 0) {
+                    exportNotes(context);
+                  } else if (value == 1) {
+                    importNotes(context);
+                  }
+                }),
           ],
           leading: IconButton(
             onPressed: () {
@@ -359,87 +359,96 @@ class _NewNoteState extends State<NewNote> with TickerProviderStateMixin {
                             ),
                           )
                         : LiveList.options(
-                            options: options,
-                            itemCount: notes.length,
-                            itemBuilder: (context, index, animation) {
-                              final note = notes[index];
-                              int id = note.id!.toInt();
-                              return FadeTransition(
-                                opacity: Tween<double>(
-                                  begin: 0,
-                                  end: 1,
-                                ).animate(animation),
-                                // And slide transition
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10.0, left: 10.0, right: 10.0),
-                                  child: SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(0, -0.1),
-                                      end: Offset.zero,
-                                    ).animate(animation),
-                                    // Paste you Widget
-                                    child: PhysicalModel(
-                                      elevation: 5.0,
-                                      shadowColor: Colors.black,
-                                      color: Colors.white,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(40.0),
+                          physics: const BouncingScrollPhysics(),
+                          options: options,
+                          itemCount: notes.length,
+                          itemBuilder: (context, index, animation) {
+                            final note = notes[index];
+
+                            int id = note.id!.toInt();
+
+                            return FadeTransition(
+                              opacity: Tween<double>(
+                                begin: 0,
+                                end: 1,
+                              ).animate(animation),
+
+                              // And slide transition
+
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10.0, left: 10.0, right: 10.0),
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, -0.1),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+
+                                  // Paste you Widget
+
+                                  child: PhysicalModel(
+                                    elevation: 5.0,
+                                    shadowColor: Colors.black,
+                                    color: Colors.white,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(40.0),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: colorContainer(),
+                                        borderRadius:
+                                            const BorderRadius.all(
+                                                Radius.circular(25.0)),
                                       ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: colorContainer(),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(25.0)),
-                                        ),
-                                        child: OpenContainer(
-                                          closedShape:
-                                              const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(25.0),
-                                            ),
+                                      child: OpenContainer(
+                                        closedShape:
+                                            const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(25.0),
                                           ),
-                                          transitionType:
-                                              ContainerTransitionType
-                                                  .fadeThrough,
-                                          closedBuilder: (BuildContext _,
-                                              VoidCallback openContainer) {
-                                            return ListTile(
-                                              onLongPress: () {
-                                                _viewDeleteNote(note.title,
-                                                    note.id!.toInt());
-                                              },
-                                              onTap: openContainer,
-                                              title: Text(
-                                                note.title,
-                                                style: const TextStyle(
-                                                    fontSize: 18.0),
-                                              ),
-                                              trailing: Text(
-                                                'Fecha: ' +
-                                                    note.createdTime
-                                                        .toIso8601String()
-                                                        .replaceAll(RegExp('T'),
-                                                            '\nHora: ')
-                                                        .replaceRange(
-                                                            25, null, ''),
-                                                style:
-                                                    TextStyle(fontSize: 12.0),
-                                              ),
-                                            );
-                                          },
-                                          openBuilder: (BuildContext _,
-                                              VoidCallback __) {
-                                            return WriteNote(id);
-                                          },
                                         ),
+                                        transitionType:
+                                            ContainerTransitionType
+                                                .fadeThrough,
+                                        closedBuilder: (BuildContext _,
+                                            VoidCallback openContainer) {
+                                          return ListTile(
+                                            onLongPress: () {
+                                              _viewDeleteNote(note.title,
+                                                  note.id!.toInt());
+                                            },
+                                            onTap: openContainer,
+                                            title: Text(
+                                              note.title,
+                                              style: const TextStyle(
+                                                  fontSize: 18.0),
+                                            ),
+                                            trailing: Text(
+                                              'Fecha: ' +
+                                                  note.createdTime
+                                                      .toIso8601String()
+                                                      .replaceAll(
+                                                          RegExp('T'),
+                                                          '\nHora: ')
+                                                      .replaceRange(
+                                                          25, null, ''),
+                                              style:
+                                                  TextStyle(fontSize: 12.0),
+                                            ),
+                                          );
+                                        },
+                                        openBuilder: (BuildContext _,
+                                            VoidCallback __) {
+                                          return WriteNote(id);
+                                        },
                                       ),
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          )
+                              ),
+                            );
+                          },
+                        )
                     : Center(
                         child: Lottie.asset('images/lottie/searching.zip',
                             width: 300, height: 300, fit: BoxFit.fill),

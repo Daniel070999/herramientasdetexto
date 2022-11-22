@@ -336,6 +336,7 @@ class _WriteNoteState extends State<WriteNote> {
       children: [
         Expanded(
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             children: [
               Column(
                 children: [

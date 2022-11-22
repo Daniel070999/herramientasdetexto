@@ -230,6 +230,7 @@ class _SpeechToTextPageState extends State<SpeechToTextPage>
               Expanded(
                 child: Center(
                   child: ListView(
+                    physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     children: [
                       Column(
