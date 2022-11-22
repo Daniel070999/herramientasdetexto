@@ -30,8 +30,13 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
   final listDownController = TextEditingController();
 
   late AnimationController controller;
-  late Animation colorAnimation;
+  late AnimationController controllerTapListen;
+  late AnimationController controllerTapSweep;
+  late AnimationController controllerTapStop;
   late Animation sizeAnimation;
+  late Animation sizeAnimationTapListen;
+  late Animation sizeAnimationTapSweep;
+  late Animation sizeAnimationTapStop;
 
   @override
   void initState() {
@@ -53,6 +58,30 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
         textEditingControllerTS.text = widget.textIn!;
       });
     }
+    //animacion de camara
+    controllerTapListen = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    sizeAnimationTapListen =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapListen);
+    controllerTapListen.addListener(() => setState(() {}));
+    //animacion de galeria
+    controllerTapSweep = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapSweep.addListener(() => setState(() {}));
+    sizeAnimationTapSweep =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapSweep);
+    //animacion de galeria
+    controllerTapStop = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapStop.addListener(() => setState(() {}));
+    sizeAnimationTapStop =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapStop);
   }
 
   @override
@@ -110,6 +139,15 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapListen.forward();
+              },
+              onTapUp: (details) {
+                controllerTapListen.reverse();
+              },
+              onTapCancel: () {
+                controllerTapListen.reverse();
+              },
               onTap: () {
                 if (textEditingControllerTS.text.isEmpty) {
                   Fluttertoast.showToast(
@@ -130,6 +168,8 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
                       flex: 3,
                       child: Image.asset(
                         'images/speaker.png',
+                        width: sizeAnimationTapListen .value,
+                        height: sizeAnimationTapListen.value,
                         scale: 9.0,
                       ),
                     ),
@@ -153,6 +193,15 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapStop.forward();
+              },
+              onTapUp: (details) {
+                controllerTapStop.reverse();
+              },
+              onTapCancel: () {
+                controllerTapStop.reverse();
+              },
               onTap: () {
                 tts.stop();
               },
@@ -166,6 +215,8 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
                       flex: 3,
                       child: Image.asset(
                         'images/stop.png',
+                        width: sizeAnimationTapStop.value,
+                        height: sizeAnimationTapStop.value,
                         scale: 7.0,
                       ),
                     ),
@@ -192,6 +243,15 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapSweep.forward();
+              },
+              onTapUp: (details) {
+                controllerTapSweep.reverse();
+              },
+              onTapCancel: () {
+                controllerTapSweep.reverse();
+              },
               onTap: () {
                 setState(() {
                   textEditingControllerTS.clear();
@@ -205,7 +265,9 @@ class _TextToSpeechPageState extends State<TextToSpeechPage>
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child: Image.asset('images/sweep.png'),
+                      child: Image.asset('images/sweep.png',
+                        width: sizeAnimationTapSweep.value,
+                        height: sizeAnimationTapSweep.value,),
                     ),
                     const Expanded(
                       flex: 1,

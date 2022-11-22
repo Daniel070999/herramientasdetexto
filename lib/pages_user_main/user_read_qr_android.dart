@@ -16,8 +16,13 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
   late TextEditingController _inputController;
   late TextEditingController _outputController;
   late AnimationController controller;
-  late Animation colorAnimation;
+  late AnimationController controllerTapEscaner;
+  late AnimationController controllerTapGallery;
+  late AnimationController controllerTapQR;
   late Animation sizeAnimation;
+  late Animation sizeAnimationTapEscaner;
+  late Animation sizeAnimationTapGallery;
+  late Animation sizeAnimationTapQR;
 
   @override
   initState() {
@@ -31,6 +36,31 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
       setState(() {});
     });
     controller.forward();
+
+    //animacion de camara
+    controllerTapEscaner = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    sizeAnimationTapEscaner =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapEscaner);
+    controllerTapEscaner.addListener(() => setState(() {}));
+    //animacion de galeria
+    controllerTapGallery = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapGallery.addListener(() => setState(() {}));
+    sizeAnimationTapGallery =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapGallery);
+    //animacion de galeria
+    controllerTapQR = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapQR.addListener(() => setState(() {}));
+    sizeAnimationTapQR =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapQR);
   }
 
   @override
@@ -481,6 +511,15 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapEscaner.forward();
+              },
+              onTapUp: (details) {
+                controllerTapEscaner.reverse();
+              },
+              onTapCancel: () {
+                controllerTapEscaner.reverse();
+              },
               onTap: _scan,
               child: Card(
                 elevation: 5,
@@ -490,7 +529,11 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child: Image.asset('images/scanPhone.png'),
+                      child: Image.asset(
+                        'images/scanPhone.png',
+                        width: sizeAnimationTapEscaner.value,
+                        height: sizeAnimationTapEscaner.value,
+                      ),
                     ),
                     const Expanded(flex: 1, child: Text("Escanear")),
                   ],
@@ -509,6 +552,15 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapGallery.forward();
+              },
+              onTapUp: (details) {
+                controllerTapGallery.reverse();
+              },
+              onTapCancel: () {
+                controllerTapGallery.reverse();
+              },
               onTap: _scanPhoto,
               child: Card(
                 elevation: 5,
@@ -518,7 +570,11 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child: Image.asset('images/galleryPicture.png'),
+                      child: Image.asset(
+                        'images/galleryPicture.png',
+                        width: sizeAnimationTapGallery.value,
+                        height: sizeAnimationTapGallery.value,
+                      ),
                     ),
                     const Expanded(
                       flex: 1,
@@ -547,6 +603,15 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapQR.forward();
+              },
+              onTapUp: (details) {
+                controllerTapQR.reverse();
+              },
+              onTapCancel: () {
+                controllerTapQR.reverse();
+              },
               onTap: () {
                 _generateBarCode(_inputController.text, context);
               },
@@ -560,7 +625,11 @@ class _ReadQRANDROIDState extends State<ReadQRANDROID>
                       flex: 3,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 5.0),
-                        child: Image.asset('images/createQR.png'),
+                        child: Image.asset(
+                          'images/createQR.png',
+                          width: sizeAnimationTapQR.value,
+                          height: sizeAnimationTapQR.value,
+                        ),
                       ),
                     ),
                     const Expanded(flex: 1, child: Text("Generar QR")),

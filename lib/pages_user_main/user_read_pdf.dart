@@ -9,15 +9,24 @@ class ReadPDF extends StatefulWidget {
   State<ReadPDF> createState() => _ReadPDFState();
 }
 
-class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
+class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin {
   final _textInput = TextEditingController();
-  PDFDoc? _pdfDoc;late AnimationController controller;
-  late Animation colorAnimation;
+  PDFDoc? _pdfDoc;
+  late AnimationController controller;
+  late AnimationController controllerTapPDF;
   late Animation sizeAnimation;
+  late Animation sizeAnimationTapPDF;
   @override
   void initState() {
-    
     super.initState();
+    //animacion de galeria
+    controllerTapPDF = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    controllerTapPDF.addListener(() => setState(() {}));
+    sizeAnimationTapPDF =
+        Tween<double>(begin: 150, end: 50.0).animate(controllerTapPDF);
     controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     sizeAnimation = Tween<double>(begin: 25.0, end: 150.0).animate(controller);
@@ -26,6 +35,7 @@ class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
     });
     controller.forward();
   }
+
   Future _pickPDFText(BuildContext context) async {
     try {
       var filePickerResult = await FilePicker.platform
@@ -63,6 +73,15 @@ class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
             width: sizeAnimation.value,
             child: InkWell(
               borderRadius: BorderRadius.circular(25.0),
+              onTapDown: (details) {
+                controllerTapPDF.forward();
+              },
+              onTapUp: (details) {
+                controllerTapPDF.reverse();
+              },
+              onTapCancel: () {
+                controllerTapPDF.reverse();
+              },
               onTap: () {
                 try {
                   _pickPDFText(context);
@@ -80,7 +99,9 @@ class _ReadPDFState extends State<ReadPDF> with TickerProviderStateMixin{
                       flex: 5,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Image.asset('images/pdf.png'),
+                        child: Image.asset('images/pdf.png',
+                        width: sizeAnimationTapPDF.value,
+                        height: sizeAnimationTapPDF.value,),
                       ),
                     ),
                     const Expanded(
